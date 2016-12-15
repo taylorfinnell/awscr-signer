@@ -1,0 +1,13 @@
+name: awscr-signer
+version: 0.1.0
+
+authors:
+  - Taylor Finnell <tmfinnell@gmail.com>
+
+license: MIT
+
+development_dependencies:
+  timecop:
+    github: taylorfinnell/timecop.cr
+    branch: update-for-crystal-0.20.1
+
