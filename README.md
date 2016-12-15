@@ -1,4 +1,5 @@
 # awscr-signer
+[![Build Status](https://travis-ci.org/taylorfinnell/awscr-signer.svg?branch=master)](https://travis-ci.org/taylorfinnell/awscr-signer)
 
 Crystal interface for signing requests according to the AWS V4 signing spec. Can be used
 across AWS regions and services.
