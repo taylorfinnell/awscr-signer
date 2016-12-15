@@ -72,4 +72,4 @@ these headers are never signed as a work around until they get fixed.
 Development
 ===
 
-The code attempts to mimic the various parts described in the documentation [here](http://docs.awscr.amazon.com/AmazonS3/latest/API/images/sigV4-auth-header-chunked-seed-signature.png)
+The code attempts to mimic the various parts described in the documentation [here](http://docs.aws.amazon.com/AmazonS3/latest/API/images/sigV4-auth-header-chunked-seed-signature.png)
