@@ -11,9 +11,10 @@ module Awscr
     # signer.sign
     # ```
     class V4
-      def initialize(request : HTTP::Request, scope : Scope)
+      def initialize(request : HTTP::Request, scope : Scope, credentials : Credentials)
         @request = request
         @scope = scope
+        @credentials = credentials
       end
 
       # Convert the HTTP::Request into a  request to figure out its
@@ -49,7 +50,7 @@ module Awscr
         end
 
         # Set the headers on the HTTP::Request
-        @request.headers["Authorization"] = Authorization.new(cr, @scope).to_s
+        @request.headers["Authorization"] = Authorization.new(cr, @scope, @credentials).to_s
         @request.headers["X-Amz-Content-Sha256"] = body_digest if add_content_sha
       end
     end

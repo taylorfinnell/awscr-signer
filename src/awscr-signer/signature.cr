@@ -13,13 +13,15 @@ module Awscr
     # puts sig.to_s # => the signature of the `Request`
     # ```
     class Signature
-      def initialize(scope : Scope, string : String)
+      def initialize(scope : Scope, string : String, credentials : Credentials)
         @scope = scope
+        @credentials = credentials
         @string = string
       end
 
-      def initialize(scope : Scope, request : Request)
+      def initialize(scope : Scope, request : Request, credentials : Credentials)
         @scope = scope
+        @credentials = credentials
         @string = request.to_s
       end
 
@@ -31,7 +33,7 @@ module Awscr
 
       # :nodoc:
       private def signing_key
-        SigningKey.new(@scope)
+        SigningKey.new(@scope, @credentials)
       end
 
       # :nodoc:

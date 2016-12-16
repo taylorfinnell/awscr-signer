@@ -20,8 +20,8 @@ x-amz-date:20150830T123600Z
 host;my-header1;x-amz-date
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
-        scope = Scope.new(key, secret, region, service, time)
-        sig = Signature.new(scope, canonical_request)
+        scope = Scope.new(region, service, time)
+        sig = Signature.new(scope, canonical_request, Credentials.new(key, secret))
 
         sig.to_s.should eq("08c7e5a9acfcfeb3ab6b2185e75ce8b1deb5e634ec47601a50643f830c755c01")
       end

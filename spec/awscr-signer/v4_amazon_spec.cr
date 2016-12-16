@@ -3,9 +3,9 @@ require "../../spec_helper"
 module Awscr
   module Signer
     def self.assert_request_signed(request : HTTP::Request, expected_auth_header : String)
-      scope = Awscr::Signer::Scope.new("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
-        "us-east-1", "service", Time.now)
-      signer = V4.new(request, scope)
+      creds = Credentials.new("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+      scope = Scope.new("us-east-1", "service", Time.now)
+      signer = V4.new(request, scope, creds)
       signer.sign(false)
 
       request.headers["Authorization"].should eq(expected_auth_header)

@@ -8,10 +8,11 @@ module Awscr
     # authorization.to_s
     # ```
     class Authorization
-      def initialize(request : Request, scope : Scope)
+      def initialize(request : Request, scope : Scope, credentials : Credentials)
         @request = request
         @scope = scope
-        @signature = Signature.new(@scope, @request.to_s)
+        @credentials = credentials
+        @signature = Signature.new(@scope, @request.to_s, @credentials)
       end
 
       # The canonical authorization string. Suitable for use in an HTTP request.
@@ -33,7 +34,7 @@ module Awscr
       private def credentials
         [
           Signer::ALGORITHM,
-          "Credential=#{@scope.credentials.key}/#{@scope.to_s}",
+          "Credential=#{@credentials.key}/#{@scope.to_s}",
         ].join(" ")
       end
     end

@@ -15,21 +15,10 @@ module Awscr
       # The date used in the scope
       getter date : Date
 
-      # The credentials used in the scope
-      getter credentials : Credentials
-
-      def initialize(key : String, secret : String, region : String, service : String, timestamp : Time = Time.utc_now)
+      def initialize(region : String, service : String, timestamp : Time = Time.utc_now)
         @date = Awscr::Signer::Date.new(timestamp)
         @region = region
         @service = service
-        @credentials = Credentials.new(key, secret)
-      end
-
-      def initialize(credentials : Credentials, region : String, service : String, timestamp : Time)
-        @date = Awscr::Signer::Date.new(timestamp)
-        @region = region
-        @service = service
-        @credentials = Credentials.new(key, secret)
       end
 
       # Return the `Scope` as a string

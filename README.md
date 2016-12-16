@@ -24,8 +24,9 @@ require "awscr-signer"
 
 request = HTTP::Request.new("GET", "/", HTTP::Headers.new)
 
-scope  = Awscr::Signer::Scope.new("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY", "us-east-1", "service")
-signer = Awscr::Signer::V4.new(request, scope)
+creds = Awscr::Signer::Credentials.new("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+scope  = Awscr::Signer::Scope.new("us-east-1", "service")
+signer = Awscr::Signer::V4.new(request, scope, creds)
 signer.sign
 
 puts request.headers["Authorization"] # the authorization header is set
@@ -38,15 +39,15 @@ require "awscs-signer"
 
 HOST = "mybucket.s3.amazonaws.com"
 
-scope  = Awscr::Signer::Scope.new("AKIDEXAMPLE",
-          "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY", "us-east-1", "service")
+creds = Awscr::Signers::Credentials.new("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+scope  = Awscr::Signer::Scope.new("us-east-1", "service")
 
 def client(host, &block)
   client = HTTP::Client.new(host)
 
   client.before_request do |request|
     request.headers["Host"] = HOST
-    signer = Awscr::Signer::V4.new(request, scope)
+    signer = Awscr::Signer::V4.new(request, scope, credentials)
     signer.sign
   end
 
