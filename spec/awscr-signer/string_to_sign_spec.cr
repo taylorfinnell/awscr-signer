@@ -17,7 +17,7 @@ module Awscr
         service = "service"
         data = "test"
 
-        scope = FakeScope.new(key, secret, region, service, time)
+        scope = FakeScope.new(region, service, time)
 
         sts = StringToSign.new(scope, data)
         sts.to_s.split("\n")[0].should eq Signer::ALGORITHM
@@ -31,7 +31,7 @@ module Awscr
         service = "service"
         data = "test"
 
-        scope = FakeScope.new(key, secret, region, service, time)
+        scope = FakeScope.new(region, service, time)
 
         sts = StringToSign.new(scope, data)
         sts.to_s.split("\n")[1].should eq Date.new(time).iso8601
@@ -45,7 +45,7 @@ module Awscr
         service = "service"
         data = "test"
 
-        scope = FakeScope.new(key, secret, region, service, time)
+        scope = FakeScope.new(region, service, time)
 
         sts = StringToSign.new(scope, data)
         sts.to_s.split("\n")[2].should eq "FAKE_SCOPE"
@@ -59,7 +59,7 @@ module Awscr
         service = "service"
         data = "test"
 
-        scope = FakeScope.new(key, secret, region, service, time)
+        scope = FakeScope.new(region, service, time)
 
         sts = StringToSign.new(scope, data)
         sts.to_s.split("\n")[3].should eq SHA256.digest(data)
