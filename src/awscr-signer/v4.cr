@@ -24,10 +24,10 @@ module Awscr
         # Convert the request into a cr
         body = @request.body
         body = body.responds_to?(:gets_to_end) ? body.gets_to_end : ""
-        cr = Request.new(@request.method, URI.parse(@request.path), body)
+        canonical_request = Request.new(@request.method, URI.parse(@request.path), body)
 
         @request.query_params.to_h.each do |k, v|
-          cr.query.add(k, v)
+          canonical_request.query.add(k, v)
         end
 
         # Replace "Date" with X-Amz-Date.
@@ -41,16 +41,16 @@ module Awscr
         end
 
         @request.headers.each do |k, v|
-          cr.headers.add(Header.new(k, v))
+          canonical_request.headers.add(Header.new(k, v))
         end
 
         body_digest = SHA256.digest(body)
         if add_content_sha
-          cr.headers.add("X-Amz-Content-Sha256", body_digest)
+          canonical_request.headers.add("X-Amz-Content-Sha256", body_digest)
         end
 
         # Set the headers on the HTTP::Request
-        @request.headers["Authorization"] = Authorization.new(cr, @scope, @credentials).to_s
+        @request.headers["Authorization"] = Authorization.new(canonical_request, @scope, @credentials).to_s
         @request.headers["X-Amz-Content-Sha256"] = body_digest if add_content_sha
       end
     end

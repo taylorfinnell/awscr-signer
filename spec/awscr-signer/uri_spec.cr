@@ -28,6 +28,30 @@ module Awscr
 
         curi.to_s.should eq "/test"
       end
+
+      it "can handle spaces" do
+        curi = Uri.new("/test ing")
+
+        curi.to_s.should eq "/test%20ing"
+      end
+
+      it "can handle multiple slashes" do
+        curi = Uri.new("/test ing/stuff")
+
+        curi.to_s.should eq "/test%20ing/stuff"
+      end
+
+      it "can handle a path that has a query string" do
+        curi = Uri.new("?list-type=2")
+
+        curi.to_s.should eq "/"
+      end
+
+      it "can handle a path that has a query string and a slash prefixing it" do
+        curi = Uri.new("/?list-type=2")
+
+        curi.to_s.should eq "/"
+      end
     end
   end
 end
