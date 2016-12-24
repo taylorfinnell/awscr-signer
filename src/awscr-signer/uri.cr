@@ -26,7 +26,7 @@ module Awscr
       # Returns the uri encoded
       def to_s
         # Allows input of /test ing/ and /test%20ing/
-        uri = URI.parse(@path)
+        uri = URI.parse(@path).normalize
         path = uri.path.to_s
         path = "/" if path.blank?
         self.class.encode(path)
