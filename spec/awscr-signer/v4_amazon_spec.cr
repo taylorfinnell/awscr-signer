@@ -201,7 +201,6 @@ module Awscr
           end
 
           it "get-space" do
-
             request = HTTP::Request.new("GET", "/example space/", HTTP::Headers.new)
 
             request.headers.add("Host", "example.amazonaws.com")
