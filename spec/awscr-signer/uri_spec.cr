@@ -4,13 +4,11 @@ module Awscr
   module Signer
     describe Uri do
       it "supports relative uri" do
-        pending "crystal uri to normalize uri" {
-          curi = Uri.new(
-            URI.parse("/test/../?x=1")
-          )
+        curi = Uri.new(
+          URI.parse("/test/../?x=1")
+        )
 
-          curi.to_s.should eq "/"
-        }
+        curi.to_s.should eq "/"
       end
 
       it "handles utf8 reasonably" do

@@ -33,17 +33,14 @@ module Awscr
           assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;my-header1;x-amz-date, Signature=c9d5ea9f3f72853aea855b47ea873832890dbdd183b4468f858259531a5138ea")
         end
 
-        it "get-header-value-multiline" do
-          pending("HTTP::Request in the stdlib does not allow newlines" \
-                  " the Header does handle this though") do
-            request = HTTP::Request.new("GET", "/", HTTP::Headers.new)
+        pending "get-header-value-multiline" do
+          request = HTTP::Request.new("GET", "/", HTTP::Headers.new)
 
-            request.headers.add("My-Header1", "value1\n   \n  value2  \nvalue3")
-            request.headers.add("Host", "example.amazonaws.com")
-            request.headers.add("X-Amz-Date", "20150830T123600Z")
+          request.headers.add("My-Header1", "value1\n   \n  value2  \nvalue3")
+          request.headers.add("Host", "example.amazonaws.com")
+          request.headers.add("X-Amz-Date", "20150830T123600Z")
 
-            assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;my-header1;x-amz-date, Signature=ba17b383a53190154eb5fa66a1b836cc297cc0a3d70a5d00705980573d8ff790")
-          end
+          assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;my-header1;x-amz-date, Signature=ba17b383a53190154eb5fa66a1b836cc297cc0a3d70a5d00705980573d8ff790")
         end
 
         it "get-header-value-order" do
@@ -144,86 +141,74 @@ module Awscr
 
         describe "normalized path" do
           it "get-relative" do
-            pending "crystal uri to normalize uri" {
-              request = HTTP::Request.new("GET", "/example/..", HTTP::Headers.new)
+            request = HTTP::Request.new("GET", "/example/..", HTTP::Headers.new)
 
-              request.headers.add("Host", "example.amazonaws.com")
-              request.headers.add("X-Amz-Date", "20150830T123600Z")
-              request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
+            request.headers.add("Host", "example.amazonaws.com")
+            request.headers.add("X-Amz-Date", "20150830T123600Z")
+            request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
 
-              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31")
-            }
+            assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31")
           end
 
           it "get-relative-relative" do
-            pending "crystal uri to normalize uri" {
-              request = HTTP::Request.new("GET", "/example1/example2/../..", HTTP::Headers.new)
+            request = HTTP::Request.new("GET", "/example1/example2/../..", HTTP::Headers.new)
 
-              request.headers.add("Host", "example.amazonaws.com")
-              request.headers.add("X-Amz-Date", "20150830T123600Z")
-              request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
+            request.headers.add("Host", "example.amazonaws.com")
+            request.headers.add("X-Amz-Date", "20150830T123600Z")
+            request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
 
-              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31")
-            }
+            assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31")
           end
 
           it "get-slash-dot-slash" do
-            pending "crystal uri to normalize uri" {
-              request = HTTP::Request.new("GET", "/./", HTTP::Headers.new)
+            request = HTTP::Request.new("GET", "/./", HTTP::Headers.new)
 
-              request.headers.add("Host", "example.amazonaws.com")
-              request.headers.add("X-Amz-Date", "20150830T123600Z")
-              request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
+            request.headers.add("Host", "example.amazonaws.com")
+            request.headers.add("X-Amz-Date", "20150830T123600Z")
+            request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
 
-              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31")
-            }
+            assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31")
           end
 
           it "get-slash-pointless-dot" do
-            pending "crystal uri to normalize uri" {
-              request = HTTP::Request.new("GET", "/./example", HTTP::Headers.new)
+            request = HTTP::Request.new("GET", "/./example", HTTP::Headers.new)
 
-              request.headers.add("Host", "example.amazonaws.com")
-              request.headers.add("X-Amz-Date", "20150830T123600Z")
-              request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
+            request.headers.add("Host", "example.amazonaws.com")
+            request.headers.add("X-Amz-Date", "20150830T123600Z")
+            request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
 
-              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=ef75d96142cf21edca26f06005da7988e4f8dc83a165a80865db7089db637ec5")
-            }
+            assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=ef75d96142cf21edca26f06005da7988e4f8dc83a165a80865db7089db637ec5")
           end
 
           it "get-slash" do
-            pending "crystal uri to normalize uri" {
-              request = HTTP::Request.new("GET", "//", HTTP::Headers.new)
+            request = HTTP::Request.new("GET", "//", HTTP::Headers.new)
 
-              request.headers.add("Host", "example.amazonaws.com")
-              request.headers.add("X-Amz-Date", "20150830T123600Z")
-              request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
+            request.headers.add("Host", "example.amazonaws.com")
+            request.headers.add("X-Amz-Date", "20150830T123600Z")
+            request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
 
-              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31")
-            }
+            assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31")
           end
 
-          it "get-slashes" do
-            pending "crystal uri to normalize uri" {
-              request = HTTP::Request.new("GET", "//example//", HTTP::Headers.new)
+          pending "get-slashes" do
+            request = HTTP::Request.new("GET", "//example//", HTTP::Headers.new)
 
-              request.headers.add("Host", "example.amazonaws.com")
-              request.headers.add("X-Amz-Date", "20150830T123600Z")
-              request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
+            request.headers.add("Host", "example.amazonaws.com")
+            request.headers.add("X-Amz-Date", "20150830T123600Z")
+            request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
 
-              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=9a624bd73a37c9a373b5312afbebe7a714a789de108f0bdfe846570885f57e84")
-            }
+            assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=9a624bd73a37c9a373b5312afbebe7a714a789de108f0bdfe846570885f57e84")
           end
+
           it "get-space" do
-            pending "get-space broken" {
-              request = HTTP::Request.new("GET", "/example space/", HTTP::Headers.new)
 
-              request.headers.add("Host", "example.amazonaws.com")
-              request.headers.add("X-Amz-Date", "20150830T123600Z")
-              request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
+            request = HTTP::Request.new("GET", "/example space/", HTTP::Headers.new)
 
-              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=652487583200325589f1fba4c7e578f72c47cb61beeca81406b39ddec1366741")
-            }
+            request.headers.add("Host", "example.amazonaws.com")
+            request.headers.add("X-Amz-Date", "20150830T123600Z")
+            request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
+
+            assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=652487583200325589f1fba4c7e578f72c47cb61beeca81406b39ddec1366741")
           end
         end
 
@@ -260,8 +245,11 @@ module Awscr
         end
 
         describe "with sts token" do
-          it "post-sts-header-after" { pending("not supported") { } }
-          it "post-sts-header-before" { pending("not supported") { } }
+          pending "post-sts-header-after" do
+          end
+
+          pending "post-sts-header-before" do
+          end
         end
 
         it "post-vanilla-empty-query-value" do
@@ -286,8 +274,7 @@ module Awscr
           assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=88d3e39e4fa54b971f51c0a09140368e1a51aafb76c4652d9998f93cf3038074")
         end
 
-        it "post-vanilla-query-space" do
-          pending("not implemented, cant create an HTTP request that chops at space in qs") { }
+        pending "post-vanilla-query-space" do
         end
 
         it "post-vanilla-query" do
