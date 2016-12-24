@@ -66,7 +66,6 @@ Known Limitations
 The following items are known issues. A client using this library can ensure
 these headers are never signed as a work around until they get fixed.
 
-- Relative paths are not supported ie: `/example/..`
 - Certain slashes in the URI path ie: `//example//`, `//`
 - Newline separated values
 - Spaces in the path ie: `/example stuff/`
