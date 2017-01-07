@@ -14,6 +14,11 @@ module Awscr
         @scope = scope
       end
 
+      # The raw `String` that will be signed.
+      def raw
+        @string
+      end
+
       # Canonical string representation
       def to_s
         [
