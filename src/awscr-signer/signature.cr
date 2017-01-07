@@ -17,12 +17,21 @@ module Awscr
         @scope = scope
         @credentials = credentials
         @string = string
+        @sts = StringToSign.new(@scope, @string)
       end
 
       def initialize(scope : Scope, request : Request, credentials : Credentials)
         @scope = scope
         @credentials = credentials
         @string = request.to_s
+        @sts = StringToSign.new(@scope, @string)
+      end
+
+      def initialize(scope : Scope, sts : StringToSign, credentials : Credentials)
+        @scope = scope
+        @credentials = credentials
+        @sts = sts
+        @string = @sts.raw
       end
 
       # Compute the digest of the signing key and the string we are signing.
@@ -38,7 +47,7 @@ module Awscr
 
       # :nodoc:
       private def string_to_sign
-        StringToSign.new(@scope, @string)
+        @sts
       end
     end
   end
