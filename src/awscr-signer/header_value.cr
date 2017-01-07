@@ -27,9 +27,11 @@ module Awscr
 
       # Merge another value into this value.
       def merge(value)
-        extract_values(value).each do |v|
+        values = extract_values(value)
+        values.each do |v|
           @values.push(clean_value(v))
         end
+        values.any?
       end
 
       # Return the header as a string
