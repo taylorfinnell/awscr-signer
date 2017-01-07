@@ -32,7 +32,7 @@ module Awscr
 
       # Merges a value into the header's values
       def merge(value : String) : Bool
-        @value.merge(value).any?
+        @value.merge(value)
       end
 
       # Returns the key as a string.
