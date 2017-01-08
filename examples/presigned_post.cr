@@ -22,5 +22,6 @@ end
 # presented with a small upload form to upload directly from
 # your browser.
 #
-# You may also access the fields via form#fields.
+# You may access the fields via form#fields.
+# You may access the url via form#url.
 puts form.to_html
