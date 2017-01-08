@@ -17,4 +17,10 @@ form.build do |builder|
   builder.eq("success_action_status", 201)
 end
 
+# The following HTML represents a valid form. Try writing the
+# HTML to a file and opening it in your browser. You will be
+# presented with a small upload form to upload directly from
+# your browser.
+#
+# You may also access the fields via form#fields.
 puts form.to_html

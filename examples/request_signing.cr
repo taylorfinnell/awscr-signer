@@ -19,6 +19,7 @@ def client(host, &block)
 
   client.before_request do |request|
     request.headers["Host"] = HOST
+
     signer = Awscr::Signer::V4.new(request, scope, credentials)
     signer.sign
   end
@@ -27,6 +28,6 @@ def client(host, &block)
 end
 
 client(HOST) do |client|
-  puts client.get("?acl").body
+  # Raw XML response for listing bucket contents.
   puts client.get("?list-type=2").body
 end
