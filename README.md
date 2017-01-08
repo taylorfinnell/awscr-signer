@@ -1,11 +1,11 @@
 # awscr-signer
 [![Build Status](https://travis-ci.org/taylorfinnell/awscr-signer.svg?branch=master)](https://travis-ci.org/taylorfinnell/awscr-signer)
 
-Crystal interface for signing requests according to the AWS V4 signing spec. Can be used
-across AWS regions and services.
+Crystal interface for AWS Signing.
+
+Supports signing Crytal `HTTP::Request` objects and generating presigned post form for browser or programatic uploading. See [Browser-Based Uploads Using POST](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-UsingHTTPPOST.html) and [Authenticating Requests (AWS Signature Version 4)](http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html) for additional details.
 
 ## Installation
-
 
 Add this to your application's `shard.yml`:
 
@@ -17,60 +17,14 @@ dependencies:
 
 ## Usage
 
-You may sign a Crystal `HTTP::Request`.
-
-```crystal
-require "awscr-signer"
-
-request = HTTP::Request.new("GET", "/", HTTP::Headers.new)
-
-creds = Awscr::Signer::Credentials.new("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
-scope  = Awscr::Signer::Scope.new("us-east-1", "service")
-signer = Awscr::Signer::V4.new(request, scope, creds)
-signer.sign
-
-puts request.headers["Authorization"] # the authorization header is set
-```
-
-A small S3 "client" that demonstrates usage.
-
-```crystal
-require "awscs-signer"
-
-HOST = "mybucket.s3.amazonaws.com"
-
-creds = Awscr::Signers::Credentials.new("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
-scope  = Awscr::Signer::Scope.new("us-east-1", "service")
-
-def client(host, &block)
-  client = HTTP::Client.new(host)
-
-  client.before_request do |request|
-    request.headers["Host"] = HOST
-    signer = Awscr::Signer::V4.new(request, scope, credentials)
-    signer.sign
-  end
-
-  yield client
-end
-
-client(HOST) do |client|
-  puts client.get("?acl").body
-  puts client.get("?list-type=2").body
-end
-```
+[Examples](https://github.com/taylorfinnell/awscr-signer/tree/master/examples)
 
 Known Limitations
 ===
 
-The following items are known issues. A client using this library can ensure
-these headers are never signed as a work around until they get fixed.
+The following items are known issues. 
 
-- Certain slashes in the URI path ie: `//example//`, `//`
-- Newline separated values
-- Spaces in the path ie: `/example stuff/`
+- The request URI can not contain repeating slashes
+- The request headers can not have new line separted values
+- The request path can not contain spaces
 
-Development
-===
-
-The code attempts to mimic the various parts described in the documentation [here](http://docs.aws.amazon.com/AmazonS3/latest/API/images/sigV4-auth-header-chunked-seed-signature.png)
