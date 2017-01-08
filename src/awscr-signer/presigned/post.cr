@@ -1,3 +1,5 @@
+require "./post_policy"
+
 module Awscr
   module Signer
     module Presigned
@@ -10,14 +12,17 @@ module Awscr
           @credentials = credentials
         end
 
+        # Build a post object by adding fields
         def build(&block)
           yield @policy
         end
 
+        # Returns if the post is valid, false otherwise
         def valid?
           !!(bucket && @policy.valid?)
         end
 
+        # Return the url to post to
         def url
           raise Exception.new("Invalid URL, no bucket field") unless bucket
           "http://#{bucket}.s3.amazonaws.com"
@@ -53,7 +58,7 @@ module Awscr
 
         # :nodoc:
         private def signature(policy)
-          Signers::PostSignature.new(policy, @credentials, @scope)
+          Signers::PostPolicy.new(policy, @credentials, @scope)
         end
 
         # :nodoc:

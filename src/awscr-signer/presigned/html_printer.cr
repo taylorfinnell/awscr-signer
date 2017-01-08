@@ -1,7 +1,7 @@
 module Awscr
   module Signer
     module Presigned
-      # Print a `Presigned::Post` object as RAW HTML
+      # Print a `Presigned::Post` object as RAW HTML.
       class HtmlPrinter
         def initialize(post : Post)
           @post = post
@@ -11,7 +11,7 @@ module Awscr
           io << print
         end
 
-        # Print a `Presigned::Post` object as RAW HTML
+        # Print a `Presigned::Post` object as RAW HTML.
         def print
           br = "<br />"
 

@@ -1,11 +1,11 @@
 module Awscr
   module Signer
     module Signers
-      class PostSignature
-        def initialize(policy : Policy, creds : Credentials, scope : Scope)
+      class PostPolicy
+        def initialize(policy : Presigned::Policy, creds : Credentials, scope : Scope)
           @sig = Signature.new(
             scope,
-            PostStringToSign.new(scope, policy.to_s),
+            Presigned::PostStringToSign.new(scope, policy.to_s),
             creds
           )
         end

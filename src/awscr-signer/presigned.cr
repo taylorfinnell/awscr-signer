@@ -1,8 +1,8 @@
-require "./presigned/*"
-
 module Awscr
-  module Signers
+  module Signer
     module Presigned
     end
   end
 end
+
+require "./presigned/*"
