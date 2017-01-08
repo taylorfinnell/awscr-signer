@@ -34,8 +34,13 @@ module Awscr
       private def credentials
         [
           Signer::ALGORITHM,
-          "Credential=#{@credentials.key}/#{@scope.to_s}",
+          "Credential=#{credential_scope.to_s}",
         ].join(" ")
+      end
+
+      # :nodoc:
+      private def credential_scope
+        CredentialScope.new(@credentials, @scope)
       end
     end
   end
