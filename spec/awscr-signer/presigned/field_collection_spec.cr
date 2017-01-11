@@ -15,7 +15,7 @@ module Awscr
         end
 
         it "can have fields added to it" do
-          field = TestField.new("k", ["v"])
+          field = TestField.new("k", "v")
 
           fields = FieldCollection.new
           fields.push(field)
@@ -30,7 +30,7 @@ module Awscr
         end
 
         it "does not add dupes" do
-          field = TestField.new("k", ["v"])
+          field = TestField.new("k", "v")
 
           fields = FieldCollection.new
           5.times { fields.push(field) }

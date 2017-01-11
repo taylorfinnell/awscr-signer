@@ -8,10 +8,10 @@ module Awscr
         getter key
         getter value
 
-        def initialize(@key : String, @value : Array(String))
+        def initialize(@key : String, @value : String)
         end
 
-        def initialize(@key : String, @value : Array(Int32))
+        def initialize(@key : String, @value : Int32)
         end
 
         abstract def serialize
@@ -26,9 +26,9 @@ module Awscr
       end
 
       # A field in the `Post` object
-      class EqualField < PostField
+      class SimpleCondition < PostField
         def serialize
-          {@key => @value.join}
+          {@key => @value}
         end
       end
     end

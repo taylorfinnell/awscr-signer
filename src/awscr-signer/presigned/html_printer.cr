@@ -17,7 +17,7 @@ module Awscr
 
           inputs = @post.fields.map do |field|
             <<-INPUT
-            <input type="hidden" name="#{field.key}" value="#{field.value.join}" />
+            <input type="hidden" name="#{field.key}" value="#{field.value}" />
             INPUT
           end
 

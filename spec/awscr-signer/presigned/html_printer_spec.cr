@@ -4,6 +4,21 @@ module Awscr
   module Signer
     module Presigned
       describe HtmlPrinter do
+        it "generates the same html each call" do
+          creds = Credentials.new("test", "test")
+          time = Time.epoch(1)
+
+          post = Presigned::Post.new("region", creds, time)
+          post.build do |b|
+            b.expiration(time)
+            b.condition("bucket", "test")
+          end
+
+          printer = HtmlPrinter.new(post)
+
+          printer.print.should eq(printer.print)
+        end
+
         it "prints html" do
           creds = Credentials.new("test", "test")
           time = Time.epoch(1)
@@ -11,7 +26,7 @@ module Awscr
           post = Presigned::Post.new("region", creds, time)
           post.build do |b|
             b.expiration(time)
-            b.eq("bucket", "test")
+            b.condition("bucket", "test")
           end
 
           printer = HtmlPrinter.new(post)

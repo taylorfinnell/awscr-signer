@@ -14,7 +14,7 @@ module Awscr
           @fields = FieldCollection.new
         end
 
-        def expiration(time : Time)
+        def expiration(time : Time | Nil)
           @expiration = time
         end
 
@@ -23,8 +23,8 @@ module Awscr
           !!!@expiration.nil?
         end
 
-        def eq(key : String, value : String | Int32)
-          @fields.push(EqualField.new(key, [value]))
+        def condition(key : String, value : String | Int32)
+          @fields.push(SimpleCondition.new(key, value))
           self
         end
 

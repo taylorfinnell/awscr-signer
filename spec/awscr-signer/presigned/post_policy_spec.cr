@@ -8,7 +8,7 @@ module Awscr
           it "adds a field" do
             policy = Policy.new
             policy.expiration(Time.now)
-            policy.eq("test", "test")
+            policy.condition("test", "test")
 
             policy.fields.size.should eq 1
           end
@@ -17,7 +17,7 @@ module Awscr
             policy = Policy.new
             policy.expiration(Time.now)
 
-            policy.eq("test", "test").should eq policy
+            policy.condition("test", "test").should eq policy
           end
         end
 
@@ -40,7 +40,7 @@ module Awscr
           it "returns policy as base64 encoded json" do
             policy = Policy.new
             policy.expiration(Time.epoch(1483859302))
-            policy.eq("test", "test")
+            policy.condition("test", "test")
 
             policy.to_s.should eq("eyJleHBpcmF0aW9uIjoiMjAxNy0wMS0wOFQwNzowODoyMi4wMDBaIiwiY29uZGl0aW9ucyI6W3sidGVzdCI6InRlc3QifV19")
           end
@@ -55,7 +55,7 @@ module Awscr
           it "can be a hash" do
             policy = Policy.new
             policy.expiration(Time.epoch(1483859302))
-            policy.eq("test", "test")
+            policy.condition("test", "test")
 
             policy.to_hash.should eq({
               "expiration" => "2017-01-08T07:08:22.000Z",
