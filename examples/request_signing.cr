@@ -1,3 +1,4 @@
+# Sign any Crystal HTTP::Request. Here we list S3 objects in a bucket.
 require "../src/awscr-signer"
 
 BUCKET = ENV["AWS_BUCKET"]

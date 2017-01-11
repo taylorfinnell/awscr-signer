@@ -13,4 +13,3 @@ module Awscr
     V4 = Signers::V4
   end
 end
-
