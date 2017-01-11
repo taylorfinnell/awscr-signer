@@ -13,8 +13,9 @@ module Awscr
             b.expiration(time)
             b.condition("bucket", "test")
           end
+          form = Form.new(post, HTTP::Client.new(""))
 
-          printer = HtmlPrinter.new(post)
+          printer = HtmlPrinter.new(form)
 
           printer.print.should eq(printer.print)
         end
@@ -28,8 +29,9 @@ module Awscr
             b.expiration(time)
             b.condition("bucket", "test")
           end
+          form = Form.new(post, HTTP::Client.new(""))
 
-          printer = HtmlPrinter.new(post)
+          printer = HtmlPrinter.new(form)
 
           html = <<-HTML
           <form action="http://test.s3.amazonaws.com" method="post" enctype="multipart/form-data">

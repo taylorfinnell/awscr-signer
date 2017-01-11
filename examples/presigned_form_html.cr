@@ -1,3 +1,5 @@
+# Get raw html for an S3 upload form
+
 require "../src/awscr-signer"
 require "secure_random"
 
@@ -8,13 +10,13 @@ SECRET = ENV["AWS_SECRET"]
 REGION = ENV["AWS_REGION"]
 
 creds = Awscr::Signer::Credentials.new(KEY, SECRET)
-form = Awscr::Signer::Presigned::Post.new(REGION, creds)
-
-form.build do |builder|
-  builder.expiration(Time.epoch(Time.now.epoch + 1000))
-  builder.condition("bucket", BUCKET)
-  builder.condition("key", SecureRandom.uuid)
-  builder.condition("success_action_status", "201")
+form = Awscr::Signer::Presigned::Form.build(REGION, creds) do |form|
+  form.expiration(Time.epoch(Time.now.epoch + 1000))
+  form.condition("bucket", BUCKET)
+  form.condition("acl", "public-read")
+  form.condition("key", SecureRandom.uuid)
+  form.condition("Content-Type", "text/plain")
+  form.condition("success_action_status", "201")
 end
 
 # The following HTML represents a valid form. Try writing the

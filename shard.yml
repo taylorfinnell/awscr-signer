@@ -7,6 +7,12 @@ authors:
 
 license: MIT
 
+dependencies:
+  # Will go away pending the merge of
+  # https://github.com/crystal-lang/crystal/pull/3844
+  multipart:
+    github: RX14/multipart.cr
+
 development_dependencies:
   timecop:
     github: waterlink/timecop.cr

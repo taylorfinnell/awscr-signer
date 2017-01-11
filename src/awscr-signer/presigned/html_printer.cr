@@ -1,10 +1,10 @@
 module Awscr
   module Signer
     module Presigned
-      # Print a `Presigned::Post` object as RAW HTML.
+      # Print a `Presigned::Form` object as RAW HTML.
       class HtmlPrinter
-        def initialize(post : Post)
-          @post = post
+        def initialize(form : Form)
+          @form = form
         end
 
         def to_s(io : IO)
@@ -15,14 +15,14 @@ module Awscr
         def print
           br = "<br />"
 
-          inputs = @post.fields.map do |field|
+          inputs = @form.fields.map do |field|
             <<-INPUT
             <input type="hidden" name="#{field.key}" value="#{field.value}" />
             INPUT
           end
 
           <<-HTML
-          <form action="#{@post.url}" method="post" enctype="multipart/form-data">
+          <form action="#{@form.url}" method="post" enctype="multipart/form-data">
           #{inputs.join(br)}
 
             <input type="file"   name="file" /> <br />

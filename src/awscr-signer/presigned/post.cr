@@ -45,9 +45,10 @@ module Awscr
           @policy.fields
         end
 
-        # Represent this `Presigned::Post` as raw HTML.
-        def to_html
-          HtmlPrinter.new(self)
+        # Sends the POST request over HTTP
+        def submit(io : IO) : HTTP::Client::Response
+          form = Form.new(self, io)
+          form.submit
         end
 
         # :nodoc:

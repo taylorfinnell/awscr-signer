@@ -103,15 +103,6 @@ module Awscr
           end
         end
 
-        describe "to_html" do
-          it "returns an html printer" do
-            creds = Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
-
-            post.to_html.should be_a(HtmlPrinter)
-          end
-        end
-
         describe "url" do
           it "raises if no bucket field" do
             creds = Credentials.new("test", "test")
