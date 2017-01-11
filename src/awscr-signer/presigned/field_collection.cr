@@ -9,7 +9,7 @@ module Awscr
       # fields = FieldCollection.new
       # fields.to_a # => [] of PostField
       # field["test"] = "test"
-      # field.push(PostField.new("Hi", ["Hi"]))
+      # field.push(PostField.new("Hi", "Hi"))
       # ```
       class FieldCollection
         include Enumerable(PostField)

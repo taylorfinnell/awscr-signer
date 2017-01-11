@@ -15,6 +15,18 @@ module Awscr
         # Build a post object by adding fields
         def build(&block)
           yield @policy
+
+          @policy.condition("x-amz-credential", credential_scope)
+          @policy.condition("x-amz-algorithm", Signer::ALGORITHM)
+          @policy.condition("x-amz-date", @scope.date.iso8601)
+
+          # Calculate sig of full policy with sig fields
+          signature = signature(@policy).to_s
+
+          # Add the final fields
+          @policy.condition("policy", @policy.to_s)
+          @policy.condition("x-amz-signature", signature)
+          self
         end
 
         # Returns if the post is valid, false otherwise
@@ -30,25 +42,12 @@ module Awscr
 
         # Returns the fields, without signature fields
         def fields
-          policy = policy_with_signature_fields
-          signature = signature(policy).to_s
-          policy.eq("policy", policy.to_s)
-          policy.eq("x-amz-signature", signature)
-          policy.fields
+          @policy.fields
         end
 
         # Represent this `Presigned::Post` as raw HTML.
         def to_html
           HtmlPrinter.new(self)
-        end
-
-        # Returns a new `Policy` object with the x-amz signaure fields
-        private def policy_with_signature_fields
-          @policy.dup.tap do |policy|
-            policy.eq("x-amz-credential", credential_scope)
-            policy.eq("x-amz-algorithm", Signer::ALGORITHM)
-            policy.eq("x-amz-date", @scope.date.iso8601)
-          end
         end
 
         # :nodoc:
@@ -64,7 +63,7 @@ module Awscr
         # :nodoc:
         private def bucket
           if bucket = fields.find { |field| field.key == "bucket" }
-            bucket.value.join
+            bucket.value
           end
         end
       end

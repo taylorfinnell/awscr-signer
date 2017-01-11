@@ -12,9 +12,9 @@ form = Awscr::Signer::Presigned::Post.new(REGION, creds)
 
 form.build do |builder|
   builder.expiration(Time.epoch(Time.now.epoch + 1000))
-  builder.eq("bucket", BUCKET)
-  builder.eq("key", SecureRandom.uuid)
-  builder.eq("success_action_status", 201)
+  builder.condition("bucket", BUCKET)
+  builder.condition("key", SecureRandom.uuid)
+  builder.condition("success_action_status", "201")
 end
 
 # The following HTML represents a valid form. Try writing the
