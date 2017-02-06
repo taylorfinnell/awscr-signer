@@ -28,13 +28,6 @@ module Awscr
 
           field.value.should eq("test")
         end
-
-        it "can use numbers" do
-          field = TestField.new("key", 1)
-
-          field.key.should eq "key"
-          field.value.should eq(1)
-        end
       end
 
       describe SimpleCondition do

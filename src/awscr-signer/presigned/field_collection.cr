@@ -32,6 +32,26 @@ module Awscr
           end
           nil
         end
+
+        def [](key)
+          fields = self.select { |field| clean_key(field.key) == clean_key(key) }
+          if fields.empty?
+            nil
+          else
+            fields.first.value
+          end
+        end
+
+        def to_hash
+          self.reduce({} of String => String) do |hash, field|
+            hash[field.key] = field.value
+            hash
+          end
+        end
+
+        private def clean_key(key)
+          key.gsub("-", "_").downcase
+        end
       end
     end
   end

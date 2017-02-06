@@ -11,9 +11,6 @@ module Awscr
         def initialize(@key : String, @value : String)
         end
 
-        def initialize(@key : String, @value : Int32)
-        end
-
         abstract def serialize
 
         def <=>(field : PostField)
