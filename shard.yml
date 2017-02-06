@@ -1,6 +1,6 @@
 name: awscr-signer
-version: 0.2.7
-crystal: 0.20.4
+version: 0.2.8
+crystal: 0.20.5
 
 authors:
   - Taylor Finnell <tmfinnell@gmail.com>
