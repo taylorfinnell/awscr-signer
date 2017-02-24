@@ -1,4 +1,4 @@
-require "multipart"
+require "http"
 require "http/client"
 require "secure_random"
 
@@ -62,7 +62,7 @@ module Awscr
 
         private def body(io : IO)
           body_io = IO::Memory.new
-          HTTP::FormData.generate(body_io, @boundary) do |form|
+          HTTP::FormData.build(body_io, @boundary) do |form|
             @post.fields.each do |field|
               form.field(field.key, field.value)
             end
