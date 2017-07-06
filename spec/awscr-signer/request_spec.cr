@@ -3,6 +3,28 @@ require "../../spec_helper"
 module Awscr
   module Signer
     describe Request do
+      it "alerts of ignored query params" do
+        expect_raises do
+          Awscr::Signer::Request.new("GET", URI.parse("http://google.com?test=1"), "")
+        end
+      end
+
+      describe "host" do
+        it "returns the uri host" do
+          request = Awscr::Signer::Request.new("GET", URI.parse("/"), "")
+          request.host.should eq(nil)
+        end
+      end
+
+      describe "full_path" do
+        it "returns the full url incl query string" do
+          request = Awscr::Signer::Request.new("GET", URI.parse("http://google.com"), "")
+          request.query.add("blah", "1")
+
+          request.full_path.should eq("http://google.com?blah=1")
+        end
+      end
+
       describe "to_s" do
         it "returns a valid  string" do
           body = ""
