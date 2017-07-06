@@ -1,5 +1,5 @@
 # awscr-signer
-[![Build Status](https://travis-ci.org/taylorfinnell/awscr-signer.svg?branch=master)](https://travis-ci.org/taylorfinnell/awscr-signer)
+[![CircleCI](https://circleci.com/gh/taylorfinnell/awscr-signer.svg?style=svg)](https://circleci.com/gh/taylorfinnell/awscr-signer)
 
 Crystal interface for AWS Signing.
 
