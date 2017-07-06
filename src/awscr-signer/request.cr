@@ -24,7 +24,12 @@ module Awscr
       # The time of the request
       getter date
 
+      @uri : Uri
+
       def initialize(method : String, uri : URI, payload : String | Nil)
+        raise Exception.new("You may not give a URI with query params, they are
+                            ignored. Use #query object intead") unless uri.query.nil?
+
         @method = method
         @uri = Uri.new(uri)
         @query = QueryString.new
@@ -32,16 +37,32 @@ module Awscr
         @payload = payload || ""
       end
 
+      def host
+        @uri.host
+      end
+
+      def full_path
+        "#{@uri.to_s}?#{query.to_s}"
+      end
+
       # Returns the request as a String.
-      def to_s : String
+      def to_s
         [
           @method,
-          @uri,
+          @uri.path,
           query,
           headers,
           @headers.keys.join(";"),
-          SHA256.digest(@payload.to_s),
+          payload,
         ].map(&.to_s).join("\n")
+      end
+
+      private def payload
+        if @payload == "UNSIGNED-PAYLOAD"
+          @payload
+        else
+          SHA256.digest(@payload.to_s)
+        end
       end
     end
   end

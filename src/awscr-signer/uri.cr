@@ -6,27 +6,39 @@ module Awscr
     #
     # ```
     # uri = Uri.new(::URI.parse("/"))
-    # uri.to_s
+    # uri.path
     # ```
     class Uri
+      @uri : URI
+
+      @query = QueryString.new
+
       def self.encode(path : String)
         URI.escape(path) { |byte| URI.unreserved?(byte) || byte.chr == '/' }
       end
 
       # The path must be non encoded.
       def initialize(path : String)
-        @path = path
+        @uri = URI.parse(path)
       end
 
       # The path must be non encoded.
-      def initialize(uri : URI)
-        @path = uri.path.to_s
+      def initialize(@uri : URI)
       end
 
       # Returns the uri encoded
-      def to_s
+      def to_s(io : IO)
+        scheme = @uri.scheme ? @uri.scheme : "http"
+        io << "#{scheme}://#{@uri.host}#{@uri.path}"
+      end
+
+      def host
+        @uri.host
+      end
+
+      def path
         # Allows input of /test ing/ and /test%20ing/
-        uri = URI.parse(@path).normalize
+        uri = URI.parse(@uri.path.to_s).normalize
         path = uri.path.to_s
         path = "/" if path.blank?
         self.class.encode(path)
