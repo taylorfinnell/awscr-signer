@@ -4,7 +4,7 @@ module Awscr
       class Url
         @expires : Int32
 
-        def initialize(@object : String, @bucket : String,
+        def initialize(@object : String, @bucket : String, @content_type : String,
                        @scope : Scope, @credentials : Credentials, @expires = 86_400)
         end
 
@@ -13,7 +13,7 @@ module Awscr
         end
 
         def put
-          request("PUT")
+          request("GET")
         end
 
         private def request(method)
@@ -27,6 +27,7 @@ module Awscr
           request.query.add("X-Amz-Date", @scope.date.iso8601)
           request.query.add("X-Amz-Expires", @expires.to_s)
           request.query.add("X-Amz-SignedHeaders", "host")
+          request.query.add("Content-Type", @content_type)
 
           sig = Signature.new(@scope, request, @credentials)
 
