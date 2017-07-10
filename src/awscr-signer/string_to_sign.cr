@@ -9,7 +9,7 @@ module Awscr
     # sts.to_s
     # ```
     class StringToSign
-      def initialize(scope : Scope, string : String)
+      def initialize(scope : Scope, string : String, @raw = false)
         @string = string
         @scope = scope
       end
@@ -21,6 +21,8 @@ module Awscr
 
       # Canonical string representation
       def to_s
+        return @string if @raw
+
         [
           Signer::ALGORITHM,
           @scope.date.iso8601,

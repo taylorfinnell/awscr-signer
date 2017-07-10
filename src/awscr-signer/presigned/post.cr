@@ -16,16 +16,16 @@ module Awscr
         def build(&block)
           yield @policy
 
-          @policy.condition("x-amz-credential", credential_scope)
+          @policy.condition("x-amz-credential", "#{@credentials.key}/#{@scope.to_s}")
           @policy.condition("x-amz-algorithm", Signer::ALGORITHM)
           @policy.condition("x-amz-date", @scope.date.iso8601)
 
-          # Calculate sig of full policy with sig fields
-          signature = signature(@policy).to_s
+          signer = Signers::V4.new(@scope, @credentials)
+          signature = signer.sign(@policy.to_s)
 
           # Add the final fields
           @policy.condition("policy", @policy.to_s)
-          @policy.condition("x-amz-signature", signature)
+          @policy.condition("x-amz-signature", signature.to_s)
           self
         end
 
@@ -43,22 +43,6 @@ module Awscr
         # Returns the fields, without signature fields
         def fields
           @policy.fields
-        end
-
-        # Sends the POST request over HTTP
-        def submit(io : IO) : HTTP::Client::Response
-          form = Form.new(self, io)
-          form.submit
-        end
-
-        # :nodoc:
-        private def credential_scope
-          CredentialScope.new(@credentials, @scope).to_s
-        end
-
-        # :nodoc:
-        private def signature(policy)
-          Signers::PostPolicy.new(policy, @credentials, @scope)
         end
 
         # :nodoc:

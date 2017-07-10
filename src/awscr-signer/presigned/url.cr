@@ -2,37 +2,54 @@ module Awscr
   module Signer
     module Presigned
       class Url
-        @expires : Int32
+        struct Options
+          getter bucket
+          getter object
+          getter expires
+          getter additional_headers
 
-        def initialize(@object : String, @bucket : String, @content_type : String,
-                       @scope : Scope, @credentials : Credentials, @expires = 86_400)
+          @expires : Int32
+          @additional_headers : Hash(String, String)
+          @bucket : String
+          @object : String
+
+          def initialize(@object, @bucket, @expires = 86_400,
+                         @additional_headers = {} of String => String)
+          end
         end
 
-        def get
-          request("GET")
+        def initialize(@scope : Scope, @credentials : Credentials, @options : Options)
         end
 
-        def put
-          request("GET")
+        def for(method)
+          raise "unsupported method #{method}" unless allowed_methods.includes?(method)
+
+          headers = HTTP::Headers.new
+          headers.add("Host", "#{@options.bucket}.s3.amazonaws.com")
+
+          request = HTTP::Request.new(method.to_s.upcase,
+            "https://#{@options.bucket}.s3.amazonaws.com#{@options.object}",
+            headers,
+            "UNSIGNED-PAYLOAD")
+
+          request.query_params.add("X-Amz-Expires", @options.expires.to_s)
+
+          @options.additional_headers.each do |k, v|
+            request.headers.add(k, v)
+          end
+
+          signer = Signers::V4.new(@scope, @credentials)
+          signer.presign(request)
+
+          String.build do |str|
+            str << "https://"
+            str << request.host_with_port
+            str << request.resource
+          end
         end
 
-        private def request(method)
-          cred_scope = CredentialScope.new(@credentials, @scope)
-
-          request = Request.new(method.upcase, URI.parse("https://#{@bucket}.s3.amazonaws.com#{@object}"), "UNSIGNED-PAYLOAD")
-          request.headers.add("Host", "#{@bucket}.s3.amazonaws.com")
-
-          request.query.add("X-Amz-Algorithm", "AWS4-HMAC-SHA256")
-          request.query.add("X-Amz-Credential", cred_scope.to_s)
-          request.query.add("X-Amz-Date", @scope.date.iso8601)
-          request.query.add("X-Amz-Expires", @expires.to_s)
-          request.query.add("X-Amz-SignedHeaders", "host")
-          request.query.add("Content-Type", @content_type)
-
-          sig = Signature.new(@scope, request, @credentials)
-
-          # the full path of the request, plus the calculated sig
-          "#{request.full_path}&X-Amz-Signature=#{sig.to_s}"
+        private def allowed_methods
+          [:get, :put]
         end
       end
     end

@@ -21,8 +21,8 @@ def client(host, &block)
   client.before_request do |request|
     request.headers["Host"] = HOST
 
-    signer = Awscr::Signer::V4.new(request, scope, credentials)
-    signer.sign
+    signer = Awscr::Signer::V4.new(scope, credentials)
+    signer.sign(request)
   end
 
   yield client
