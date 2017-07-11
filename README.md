@@ -34,8 +34,8 @@ dependencies:
 **Signing an `HTTP::Request`.**
 
 ```crystal
-signer = Awscr::Signer::V4.new(request, scope, credentials)
-signer.sign
+signer = Awscr::Signer::V4.new(scope, credentials)
+signer.sign_request(request)
 ```
 
 ***NOTE**: It may be required for you to set the `Host` header to the AWS service
