@@ -25,10 +25,10 @@ module Awscr
           raise "unsupported method #{method}" unless allowed_methods.includes?(method)
 
           headers = HTTP::Headers.new
-          headers.add("Host", "#{@options.bucket}.s3.amazonaws.com")
+          headers.add("Host", "s3.amazonaws.com")
 
           request = HTTP::Request.new(method.to_s.upcase,
-            "https://#{@options.bucket}.s3.amazonaws.com#{@options.object}",
+            "/#{@options.bucket}#{@options.object}",
             headers,
             "UNSIGNED-PAYLOAD")
 
@@ -43,7 +43,7 @@ module Awscr
 
           String.build do |str|
             str << "https://"
-            str << request.host_with_port
+            str << request.host
             str << request.resource
           end
         end
