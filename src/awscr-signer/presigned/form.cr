@@ -56,10 +56,12 @@ module Awscr
           @post.fields
         end
 
+        # :nodoc:
         private def headers
           HTTP::Headers{"Content-Type" => %(multipart/form-data; boundary="#{@boundary}")}
         end
 
+        # :nodoc:
         private def body(io : IO)
           body_io = IO::Memory.new
           HTTP::FormData.build(body_io, @boundary) do |form|
