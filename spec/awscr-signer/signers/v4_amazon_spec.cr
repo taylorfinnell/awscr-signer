@@ -6,8 +6,8 @@ module Awscr
       def self.assert_request_signed(request : HTTP::Request, expected_auth_header : String)
         creds = Credentials.new("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
         scope = Scope.new("us-east-1", "service", Time.now)
-        signer = V4.new(request, scope, creds)
-        signer.sign(false)
+        signer = V4.new(scope, creds)
+        signer.sign(request, false)
 
         request.headers["Authorization"].should eq(expected_auth_header)
       end

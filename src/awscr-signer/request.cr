@@ -25,8 +25,9 @@ module Awscr
       getter date
 
       @uri : Uri
+      @body : String
 
-      def initialize(method : String, uri : URI, payload : String | Nil)
+      def initialize(method : String, uri : URI, body : IO | String | Nil)
         raise Exception.new("You may not give a URI with query params, they are
                             ignored. Use #query object intead") unless uri.query.nil?
 
@@ -34,7 +35,7 @@ module Awscr
         @uri = Uri.new(uri)
         @query = QueryString.new
         @headers = HeaderCollection.new
-        @payload = payload || ""
+        @body = body.is_a?(IO) ? body.gets_to_end : body.to_s
       end
 
       def host
@@ -53,15 +54,15 @@ module Awscr
           query,
           headers,
           @headers.keys.join(";"),
-          payload,
+          body,
         ].map(&.to_s).join("\n")
       end
 
-      private def payload
-        if @payload == "UNSIGNED-PAYLOAD"
-          @payload
+      def body
+        if @body == "UNSIGNED-PAYLOAD"
+          @body
         else
-          SHA256.digest(@payload.to_s)
+          SHA256.digest(@body.to_s)
         end
       end
     end
