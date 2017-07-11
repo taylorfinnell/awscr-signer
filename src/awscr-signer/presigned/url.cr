@@ -6,15 +6,15 @@ module Awscr
           getter bucket
           getter object
           getter expires
-          getter additional_headers
+          getter additional_options
 
           @expires : Int32
-          @additional_headers : Hash(String, String)
+          @additional_options : Hash(String, String)
           @bucket : String
           @object : String
 
           def initialize(@object, @bucket, @expires = 86_400,
-                         @additional_headers = {} of String => String)
+                         @additional_options = {} of String => String)
           end
         end
 
@@ -34,8 +34,8 @@ module Awscr
 
           request.query_params.add("X-Amz-Expires", @options.expires.to_s)
 
-          @options.additional_headers.each do |k, v|
-            request.headers.add(k, v)
+          @options.additional_options.each do |k, v|
+            request.query_params.add(k, v)
           end
 
           signer = Signers::V4.new(@scope, @credentials)
