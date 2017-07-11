@@ -1,11 +1,21 @@
 module Awscr
   module Signer
     module Presigned
+      # A Presigned::URL, useful to share a link or create a link for a direct
+      # PUT.
       class Url
+        # Options for generating a `Presigned::Url`
         struct Options
+          # The bucket for the presigned url
           getter bucket
+
+          # The object key, it must start with '/'
           getter object
+
+          # When the link expires, defaults to 1 day
           getter expires
+
+          # Additional presigned options
           getter additional_options
 
           @expires : Int32
@@ -21,7 +31,8 @@ module Awscr
         def initialize(@scope : Scope, @credentials : Credentials, @options : Options)
         end
 
-        def for(method)
+        # Create a Presigned::Url link.
+        def for(method : Symbol)
           raise "unsupported method #{method}" unless allowed_methods.includes?(method)
 
           headers = HTTP::Headers.new
@@ -48,6 +59,7 @@ module Awscr
           end
         end
 
+        # :nodoc:
         private def allowed_methods
           [:get, :put]
         end

@@ -9,6 +9,36 @@ module Awscr
     end
 
     describe StringToSign do
+      describe "raw" do
+        it "returns underlying string" do
+          time = Time.epoch(1440938160)
+          key = "AKIDEXAMPLE"
+          secret = "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY"
+          region = "us-east-1"
+          service = "service"
+          data = "test"
+
+          scope = FakeScope.new(region, service, time)
+
+          sts = StringToSign.new(scope, data)
+          sts.raw.should eq(data)
+        end
+      end
+
+      it "returns raw string if raw is true" do
+        time = Time.epoch(1440938160)
+        key = "AKIDEXAMPLE"
+        secret = "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY"
+        region = "us-east-1"
+        service = "service"
+        data = "test"
+
+        scope = FakeScope.new(region, service, time)
+
+        sts = StringToSign.new(scope, data, raw: true)
+        sts.to_s.should eq(data)
+      end
+
       it "contains the algorithm" do
         time = Time.epoch(1440938160)
         key = "AKIDEXAMPLE"

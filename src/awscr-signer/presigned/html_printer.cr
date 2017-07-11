@@ -7,6 +7,7 @@ module Awscr
           @form = form
         end
 
+        # Return the raw HTML
         def to_s(io : IO)
           io << print
         end
@@ -25,7 +26,7 @@ module Awscr
           <form action="#{@form.url}" method="post" enctype="multipart/form-data">
           #{inputs.join(br)}
 
-            <input type="file"   name="file" /> <br />
+            <input type="file"   name="file" /> #{br}
             <input type="submit" name="submit" value="Upload" />
           </form>
           HTML

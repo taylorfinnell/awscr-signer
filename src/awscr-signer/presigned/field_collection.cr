@@ -30,7 +30,6 @@ module Awscr
           @fields.each do |field|
             yield field
           end
-          nil
         end
 
         def [](key)

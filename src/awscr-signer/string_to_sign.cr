@@ -21,7 +21,7 @@ module Awscr
 
       # Canonical string representation
       def to_s
-        return @string if @raw
+        return raw if @raw
 
         [
           Signer::ALGORITHM,
