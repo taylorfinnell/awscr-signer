@@ -10,13 +10,15 @@ REGION = ENV["AWS_REGION"]
 creds = Awscr::Signer::Credentials.new(KEY, SECRET)
 scope = Awscr::Signer::Scope.new(REGION, "s3")
 
-object = "/#{SecureRandom.uuid}.txt"
+object = "/#{SecureRandom.uuid}"
 
-options = Awscr::Signer::Presigned::Url::Options.new(
-  "/#{SecureRandom.uuid}.txt", BUCKET)
+options = Awscr::Signer::Presigned::Url::Options.new(object: object, bucket: BUCKET, additional_options: {
+  "x-amz-acl" => "public-read",
+  "Content-Type" => "image/png"
+})
+
 url = Awscr::Signer::Presigned::Url.new(scope, creds, options)
-HTTP::Client.put(url.for(:put), HTTP::Headers.new, body: "Howdy!")
 
-# get it back
+HTTP::Client.put(url.for(:put), HTTP::Headers.new, body: "Howdy!")
 resp = HTTP::Client.get(url.for(:get))
-p resp.body
+p "Object #{object}: #{resp.body}"
