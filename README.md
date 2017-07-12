@@ -44,6 +44,11 @@ before signing.*
 
 [Examples](https://github.com/taylorfinnell/awscr-signer/tree/master/examples)
 
+S3
+===
+
+For S3 specific support see [awscr-s3](https://github.com/taylorfinnell/awscr-s3/)
+
 Known Limitations
 ===
 
