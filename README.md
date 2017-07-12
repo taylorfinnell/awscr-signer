@@ -41,32 +41,13 @@ signer.sign_request(request)
 ***NOTE**: It may be required for you to set the `Host` header to the AWS service
 before signing.*
 
-**Creating a `Presigned::Form`.**
-
-```crystal
-form = Awscr::Signer::Presigned::Form.build("us-east-1", credentials) do |form|
-  form.expiration(Time.epoch(Time.now.epoch + 1000))
-  form.condition("bucket", BUCKET)
-  form.condition("acl", "public-read")
-  form.condition("key", SecureRandom.uuid)
-  form.condition("Content-Type", "text/plain")
-  form.condition("success_action_status", "201")
-end
-```
-
-**Converting the form to raw HTML (for browser uploads, etc).**
-
-```crystal
-puts form.to_html
-```
-
-**Submitting the form via `HTTP::Client`.**
-
-```crystal
-form.submit(IO::Memory.new("Hello, S3!"))
-```
 
 [Examples](https://github.com/taylorfinnell/awscr-signer/tree/master/examples)
+
+S3
+===
+
+For S3 specific support see [awscr-s3](https://github.com/taylorfinnell/awscr-s3/)
 
 Known Limitations
 ===
