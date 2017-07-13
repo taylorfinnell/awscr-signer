@@ -12,12 +12,11 @@ module Awscr
           Timecop.reset
         end
 
-
         it "adds content-sha256 header by default" do
           request = HTTP::Request.new("GET", "/", HTTP::Headers.new, "BODY")
 
-          signer = V4.new("s3", "us-east-1", 
-                        "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+          signer = V4.new("s3", "us-east-1",
+            "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
           signer.sign(request)
 
           request.headers["X-Amz-Content-Sha256"].should eq(SHA256.digest("BODY"))
@@ -29,8 +28,8 @@ module Awscr
           request = HTTP::Request.new("GET", "/")
           request.headers.add("Date", Signer::Date.new(time).iso8601)
 
-          signer = V4.new("s3", "us-east-1", 
-                        "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+          signer = V4.new("s3", "us-east-1",
+            "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
           signer.sign(request, false)
 
           request.headers.has_key?("Date").should eq(false)
@@ -45,8 +44,8 @@ module Awscr
           request.headers.add("X-Amz-Date", Signer::Date.new(time2).iso8601)
           request.headers.add("Date", Signer::Date.new(time).iso8601)
 
-          signer = V4.new("s3", "us-east-1", 
-                        "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+          signer = V4.new("s3", "us-east-1",
+            "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
           signer.sign(request, false)
 
           request.headers.has_key?("Date").should eq(false)
@@ -58,8 +57,8 @@ module Awscr
 
           request = HTTP::Request.new("GET", "/")
 
-          signer = V4.new("s3", "us-east-1", 
-                        "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+          signer = V4.new("s3", "us-east-1",
+            "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
           signer.sign(request, false)
 
           request.headers.has_key?("Date").should eq(false)
@@ -72,8 +71,8 @@ module Awscr
           request = HTTP::Request.new("GET", "/")
           request.headers.add("X-Amz-Date", Signer::Date.new(time).iso8601)
 
-          signer = V4.new("s3", "us-east-1", 
-                        "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+          signer = V4.new("s3", "us-east-1",
+            "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
           signer.sign(request, false)
 
           request.headers.has_key?("Date").should eq(false)
