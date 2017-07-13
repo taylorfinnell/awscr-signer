@@ -17,30 +17,28 @@ dependencies:
 
 ## Usage
 
-**Creating a `Credentials` object.**
-
+**Create a `Signer::V4` object.**
 ```crystal
-  Awscr::Signer::Credentials.new("SECRET_KEY", "SECRET")
-```
-
-**Creating a `Scope` object.**
-
-```crystal
-  # where s3 is any amazon service
-  # where us-east-1 is any region
-  Awscr::Signer::Scope.new("us-east-1", "s3")
+signer = Awscr::Signer::V4.new("service", "region", "key", "secret")
 ```
 
 **Signing an `HTTP::Request`.**
 
 ```crystal
-signer = Awscr::Signer::V4.new(scope, credentials)
-signer.sign_request(request)
+signer.sign(request)
 ```
 
-***NOTE**: It may be required for you to set the `Host` header to the AWS service
-before signing.*
+**Signing an `String`.**
 
+```crystal
+signer.sign("my string")
+```
+
+**Presign a `HTTP::Request`.**
+
+```crystal
+signer.presign(request)
+```
 
 [Examples](https://github.com/taylorfinnell/awscr-signer/tree/master/examples)
 
@@ -52,7 +50,7 @@ For S3 specific support see [awscr-s3](https://github.com/taylorfinnell/awscr-s3
 Known Limitations
 ===
 
-The following items are known issues. 
+The following items are known issues.
 
 - The request URI can not contain repeating slashes.
 - The request headers can not have new line separted values.
