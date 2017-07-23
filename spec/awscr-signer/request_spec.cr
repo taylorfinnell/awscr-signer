@@ -3,6 +3,12 @@ require "../../spec_helper"
 module Awscr
   module Signer
     describe Request do
+      it "does not modify http request body" do
+        body = IO::Memory.new("body")
+        request = Awscr::Signer::Request.new("GET", URI.parse("/"), body)
+        body.gets_to_end.should eq("body")
+      end
+
       it "alerts of ignored query params" do
         expect_raises do
           Awscr::Signer::Request.new("GET", URI.parse("http://google.com?test=1"), "")

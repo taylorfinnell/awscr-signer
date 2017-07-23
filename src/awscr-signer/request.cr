@@ -35,7 +35,7 @@ module Awscr
         @uri = Uri.new(uri)
         @query = QueryString.new
         @headers = HeaderCollection.new
-        @body = body.is_a?(IO) ? body.gets_to_end : body.to_s
+        @body = body.to_s
       end
 
       def host
