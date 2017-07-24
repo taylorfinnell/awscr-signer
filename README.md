@@ -3,7 +3,7 @@
 
 Crystal interface for AWS Signing.
 
-Supports signing Crystal `HTTP::Request` objects and generating presigned post form for browser or programmatic uploading. See [Browser-Based Uploads Using POST](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-UsingHTTPPOST.html) and [Authenticating Requests (AWS Signature Version 4)](http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html) for additional details.
+Supports signing or presigning Crystal `HTTP::Request` objects.
 
 ## Installation
 
@@ -45,7 +45,7 @@ signer.presign(request)
 S3
 ===
 
-For S3 specific support see [awscr-s3](https://github.com/taylorfinnell/awscr-s3/)
+For S3 specific support see [awscr-s3](https://github.com/taylorfinnell/awscr-s3/).
 
 Known Limitations
 ===
