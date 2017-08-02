@@ -27,8 +27,14 @@ module Awscr
           Signer::ALGORITHM,
           @scope.date.iso8601,
           @scope,
-          SHA256.digest(@string),
+          digest,
         ].map(&.to_s).join("\n")
+      end
+
+      private def digest
+        digest = OpenSSL::Digest.new("SHA256")
+        digest.update(@string)
+        digest.hexdigest
       end
     end
   end

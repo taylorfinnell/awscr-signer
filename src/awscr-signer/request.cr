@@ -24,8 +24,15 @@ module Awscr
       # The time of the request
       getter date
 
+      # The computed digest of the request body
+      getter digest
+
+      # The request body
+      getter body
+
       @uri : Uri
-      @body : String
+      @digest : String
+      @body : IO
 
       def initialize(method : String, uri : URI, body : IO | String | Nil)
         raise Exception.new("You may not give a URI with query params, they are
@@ -35,13 +42,8 @@ module Awscr
         @uri = Uri.new(uri)
         @query = QueryString.new
         @headers = HeaderCollection.new
-
-        if body.is_a?(IO)
-          @body = body.gets_to_end
-          body.rewind
-        else
-          @body = body.to_s
-        end
+        @body = build_body(body)
+        @digest = build_body_digest
       end
 
       def host
@@ -60,15 +62,36 @@ module Awscr
           query,
           headers,
           @headers.keys.join(";"),
-          body,
+          @digest,
         ].map(&.to_s).join("\n")
       end
 
-      def body
-        if @body == "UNSIGNED-PAYLOAD"
-          @body
+      private def build_body_digest
+        if body.to_s == "UNSIGNED-PAYLOAD"
+          body.to_s
         else
-          SHA256.digest(@body.to_s)
+          digest = OpenSSL::Digest.new("SHA256")
+
+          buffer = uninitialized UInt8[1_048_576] # 1mb
+          while (read_bytes = body.read(buffer.to_slice)) > 0
+            digest << buffer.to_slice[0, read_bytes]
+          end
+          body.rewind
+
+          digest.hexdigest
+        end
+      end
+
+      private def build_body(body)
+        case body
+        when IO
+          body
+        when String
+          IO::Memory.new(body)
+        when Nil
+          IO::Memory.new("")
+        else
+          raise "Unsupported body type"
         end
       end
     end

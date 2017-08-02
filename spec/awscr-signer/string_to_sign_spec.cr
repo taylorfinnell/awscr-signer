@@ -91,8 +91,11 @@ module Awscr
 
         scope = FakeScope.new(region, service, time)
 
+        digest = OpenSSL::Digest.new("SHA256")
+        digest.update(data)
+
         sts = StringToSign.new(scope, data)
-        sts.to_s.split("\n")[3].should eq SHA256.digest(data)
+        sts.to_s.split("\n")[3].should eq(digest.hexdigest)
       end
     end
   end

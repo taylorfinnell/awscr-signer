@@ -19,7 +19,9 @@ module Awscr
             "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
           signer.sign(request)
 
-          request.headers["X-Amz-Content-Sha256"].should eq(SHA256.digest("BODY"))
+          digest = OpenSSL::Digest.new("SHA256")
+          digest.update("BODY")
+          request.headers["X-Amz-Content-Sha256"].should eq(digest.hexdigest)
         end
 
         it "replaces date header with x-amz-date" do
