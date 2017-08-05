@@ -15,6 +15,21 @@ module Awscr
         end
       end
 
+      describe "digest" do
+        it "returns unsigned payload if body is unsigned payload" do
+          request = Awscr::Signer::Request.new("GET", URI.parse("/"), "UNSIGNED-PAYLOAD")
+
+          request.digest.should eq("UNSIGNED-PAYLOAD")
+        end
+
+        it "returns digest of body" do
+          body = IO::Memory.new("body")
+          request = Awscr::Signer::Request.new("GET", URI.parse("/"), body)
+
+          request.digest.should eq("230d8358dc8e8890b4c58deeb62912ee2f20357ae92a5cc861b98e68fe31acb5")
+        end
+      end
+
       describe "host" do
         it "returns the uri host" do
           request = Awscr::Signer::Request.new("GET", URI.parse("/"), "")
