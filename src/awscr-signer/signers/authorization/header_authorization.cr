@@ -2,8 +2,6 @@ module Awscr
   module Signer
     module Signers
       class AuthorizationHeaderStrategy
-        include AuthorizationStrategy
-
         def initialize(@scope : Scope, @credentials : Credentials, @add_sha = true)
         end
 

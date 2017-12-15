@@ -13,6 +13,8 @@ module Awscr
       # signer.presign(request)
       # ```
       class V4
+        include Interface
+
         def initialize(service : String, region : String, aws_access_key : String, aws_secret_key : String)
           @scope = Signer::Scope.new(region, service)
           @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)

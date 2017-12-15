@@ -2,8 +2,6 @@ module Awscr
   module Signer
     module Signers
       class PlainTextStrategy
-        include AuthorizationStrategy
-
         def initialize(@scope : Scope, @credentials : Credentials)
         end
 
