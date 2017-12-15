@@ -21,14 +21,13 @@ module Awscr
         end
 
         # Sign an HTTP::Request
-        def sign(request : HTTP::Request, content_sha = true)
-          strategy = AuthorizationHeaderStrategy.new(@scope, @credentials, content_sha)
+        def sign(request : HTTP::Request)
+          strategy = Authorization::Header.new(@scope, @credentials)
           strategy.sign(request)
         end
 
-
-        def presign(request, content_sha = true)
-          strategy = AuthorizationQueryStringStrategy.new(@scope, @credentials)
+        def presign(request)
+          strategy = Authorization::QueryString.new(@scope, @credentials)
           strategy.sign(request)
         end
       end

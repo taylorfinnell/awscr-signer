@@ -32,7 +32,7 @@ module Awscr
 
           signer = V4.new("s3", "us-east-1",
             "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
-          signer.sign(request, false)
+          signer.sign(request)
 
           request.headers.has_key?("Date").should eq(false)
           request.headers["X-Amz-Date"].should eq(Signer::Date.new(time).iso8601)
@@ -48,7 +48,7 @@ module Awscr
 
           signer = V4.new("s3", "us-east-1",
             "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
-          signer.sign(request, false)
+          signer.sign(request)
 
           request.headers.has_key?("Date").should eq(false)
           request.headers["X-Amz-Date"].should eq(Signer::Date.new(time2).iso8601)
@@ -61,7 +61,7 @@ module Awscr
 
           signer = V4.new("s3", "us-east-1",
             "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
-          signer.sign(request, false)
+          signer.sign(request)
 
           request.headers.has_key?("Date").should eq(false)
           request.headers["X-Amz-Date"].should eq(Signer::Date.new(time).iso8601)
@@ -75,7 +75,7 @@ module Awscr
 
           signer = V4.new("s3", "us-east-1",
             "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
-          signer.sign(request, false)
+          signer.sign(request)
 
           request.headers.has_key?("Date").should eq(false)
           request.headers["X-Amz-Date"].should eq(Signer::Date.new(time).iso8601)

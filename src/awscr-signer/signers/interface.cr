@@ -3,7 +3,7 @@ module Awscr
     module Signers
       module Interface
         abstract def sign(request : HTTP::Request)
-        abstract def presign(request, content_sha = true)
+        abstract def presign(request)
       end
     end
   end
