@@ -58,7 +58,7 @@ module Awscr
       end
 
       # Get a header by key, or nil of it does not exit
-      def [](key) : (Header | Nil)
+      def []?(key) : (Header | Nil)
         @headers.find { |g| g == key }
       end
 
