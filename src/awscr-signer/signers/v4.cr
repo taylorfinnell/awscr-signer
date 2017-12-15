@@ -26,11 +26,6 @@ module Awscr
           strategy.sign(request)
         end
 
-        # Sign a plain string with the credentials
-        def sign(string : String)
-          strat = PlainTextStrategy.new(@scope, @credentials)
-          strat.sign(string)
-        end
 
         def presign(request, content_sha = true)
           strategy = AuthorizationQueryStringStrategy.new(@scope, @credentials)
