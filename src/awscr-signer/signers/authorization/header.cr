@@ -18,7 +18,7 @@ module Awscr
             end
 
             canonical_request = Request.new(request.method,
-                                            URI.parse(request.path), request.body)
+              URI.parse(request.path), request.body)
 
             request.query_params.to_h.each do |k, v|
               canonical_request.query.add(k, v)
@@ -34,7 +34,7 @@ module Awscr
                 canonical_request.digest
 
               canonical_request.headers.add("X-Amz-Content-Sha256",
-                                            canonical_request.digest)
+                canonical_request.digest)
             end
 
             signature = Signature.new(@scope, canonical_request.to_s, @credentials)

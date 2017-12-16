@@ -14,14 +14,13 @@ module Awscr
     # ```
     class Signature
       def initialize(scope : Scope, string : String, credentials : Credentials,
-                    @compute_digest = true)
+                     @compute_digest = true)
         @scope = scope
         @credentials = credentials
         @string = string
       end
 
-      def initialize(scope : Scope, request : Request, credentials :
-                     Credentials, @compute_digest = true)
+      def initialize(scope : Scope, request : Request, credentials : Credentials, @compute_digest = true)
         @scope = scope
         @credentials = credentials
         @string = request.to_s
@@ -39,7 +38,7 @@ module Awscr
             Signer::ALGORITHM,
             @scope.date.iso8601,
             @scope,
-            digest
+            digest,
           ].map(&.to_s).join("\n")
         else
           @string
