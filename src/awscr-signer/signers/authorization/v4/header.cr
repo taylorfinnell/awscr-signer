@@ -3,7 +3,7 @@ module Awscr
     module Signers
       module Authorization::V4
         class Header
-          def initialize(@scope : Scope, @credentials : Credentials)
+          def initialize(@scope : Scope, @credentials : Credentials, @add_sha = true)
           end
 
           def sign(request : HTTP::Request)
@@ -28,13 +28,12 @@ module Awscr
               canonical_request.headers.add(Signer::Header.new(k, v))
             end
 
-            content_length = request.headers["Content-Length"]?
-            if content_length && content_length.to_i > 0
+            if @add_sha
               request.headers["X-Amz-Content-Sha256"] =
                 canonical_request.digest
 
               canonical_request.headers.add("X-Amz-Content-Sha256",
-                canonical_request.digest)
+                                            canonical_request.digest)
             end
 
             signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)

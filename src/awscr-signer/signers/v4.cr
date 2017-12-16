@@ -26,8 +26,8 @@ module Awscr
         end
 
         # Sign an HTTP::Request
-        def sign(request : HTTP::Request)
-          strategy = Authorization::V4::Header.new(@scope, @credentials)
+        def sign(request : HTTP::Request, add_sha = true)
+          strategy = Authorization::V4::Header.new(@scope, @credentials, add_sha)
           strategy.sign(request)
         end
 
