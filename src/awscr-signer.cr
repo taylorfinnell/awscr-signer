@@ -1,3 +1,4 @@
+require "./awscr-signer/core/*"
 require "./awscr-signer/*"
 
 module Awscr
