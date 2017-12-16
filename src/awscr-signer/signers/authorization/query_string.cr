@@ -19,7 +19,7 @@ module Awscr
             end
 
             request.headers.each do |k, v|
-              canonical_request.headers.add(Header.new(k, v))
+              canonical_request.headers.add(Signer::Header.new(k, v))
             end
 
             canonical_request.query.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")

@@ -13,41 +13,52 @@ module Awscr
     # puts sig.to_s # => the signature of the `Request`
     # ```
     class Signature
-      def initialize(scope : Scope, string : String, credentials : Credentials)
+      def initialize(scope : Scope, string : String, credentials : Credentials,
+                    @compute_digest = true)
         @scope = scope
         @credentials = credentials
         @string = string
-        @sts = StringToSign.new(@scope, @string)
       end
 
-      def initialize(scope : Scope, request : Request, credentials : Credentials)
+      def initialize(scope : Scope, request : Request, credentials :
+                     Credentials, @compute_digest = true)
         @scope = scope
         @credentials = credentials
         @string = request.to_s
-        @sts = StringToSign.new(@scope, @string)
-      end
-
-      def initialize(scope : Scope, sts : StringToSign, credentials : Credentials)
-        @scope = scope
-        @credentials = credentials
-        @sts = sts
-        @string = @sts.raw
       end
 
       # Compute the digest of the signing key and the string we are signing.
       # Returns the digest as a downcased hex string
       def to_s
-        HMAC.hexdigest(signing_key.to_s, string_to_sign.to_s)
+        HMAC.hexdigest(signing_key, string_to_sign)
+      end
+
+      private def string_to_sign
+        if @compute_digest
+          [
+            Signer::ALGORITHM,
+            @scope.date.iso8601,
+            @scope,
+            digest
+          ].map(&.to_s).join("\n")
+        else
+          @string
+        end
+      end
+
+      private def digest
+        digest = OpenSSL::Digest.new("SHA256")
+        digest.update(@string)
+        digest.hexdigest
       end
 
       # :nodoc:
       private def signing_key
-        SigningKey.new(@scope, @credentials)
-      end
-
-      # :nodoc:
-      private def string_to_sign
-        @sts
+        k_secret = "AWS4#{@credentials.secret}"
+        k_date = HMAC.digest(k_secret, @scope.date.ymd)
+        k_region = HMAC.digest(k_date, @scope.region)
+        k_service = HMAC.digest(k_region, @scope.service)
+        HMAC.digest(k_service, "aws4_request")
       end
     end
   end
