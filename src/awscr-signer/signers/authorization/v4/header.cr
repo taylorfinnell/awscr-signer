@@ -33,7 +33,7 @@ module Awscr
                 canonical_request.digest
 
               canonical_request.headers.add("X-Amz-Content-Sha256",
-                                            canonical_request.digest)
+                canonical_request.digest)
             end
 
             signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)
