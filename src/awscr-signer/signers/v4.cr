@@ -20,6 +20,11 @@ module Awscr
           @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 
+        def sign(str : String)
+          authorization = Authorization::PlainText.new(@scope, @credentials)
+          authorization.sign(str)
+        end
+
         # Sign an HTTP::Request
         def sign(request : HTTP::Request)
           strategy = Authorization::Header.new(@scope, @credentials)
