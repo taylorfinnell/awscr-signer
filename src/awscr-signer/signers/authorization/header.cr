@@ -17,7 +17,7 @@ module Awscr
               request.headers["X-Amz-Date"] ||= @scope.date.iso8601
             end
 
-            canonical_request = Request.new(request.method,
+            canonical_request = Signer::V4::Request.new(request.method,
               URI.parse(request.path), request.body)
 
             request.query_params.to_h.each do |k, v|
@@ -37,7 +37,7 @@ module Awscr
                 canonical_request.digest)
             end
 
-            signature = Signature.new(@scope, canonical_request.to_s, @credentials)
+            signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)
 
             request.headers["Authorization"] = [
               [Signer::ALGORITHM, "Credential=#{@credentials.key}/#{@scope.to_s}"].join(" "),

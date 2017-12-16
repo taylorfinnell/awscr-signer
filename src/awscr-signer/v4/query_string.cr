@@ -1,5 +1,5 @@
 module Awscr
-  module Signer
+  module Signer::V4
     # Represents a `QueryString`. When converted to a String the keys and values
     # are sorted and URI encoded.
     #

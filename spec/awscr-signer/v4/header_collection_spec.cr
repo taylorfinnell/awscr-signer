@@ -1,7 +1,7 @@
 require "../../spec_helper"
 
 module Awscr
-  module Signer
+  module Signer::V4
     describe HeaderCollection do
       it "merges dupe headers into a single header with csv without caring about case" do
         headers = HeaderCollection.new

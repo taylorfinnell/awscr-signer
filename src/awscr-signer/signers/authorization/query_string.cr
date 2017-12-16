@@ -11,7 +11,7 @@ module Awscr
             request.query_params.add("X-Amz-Credential", "#{@credentials.key}/#{@scope.to_s}")
             request.query_params.add("X-Amz-Date", @scope.date.iso8601)
 
-            canonical_request = Request.new(request.method,
+            canonical_request = Signer::V4::Request.new(request.method,
               URI.parse(request.path), request.body)
 
             request.query_params.to_h.each do |k, v|
@@ -24,7 +24,7 @@ module Awscr
 
             canonical_request.query.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")
 
-            signature = Signature.new(@scope, canonical_request.to_s, @credentials)
+            signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)
             request.query_params.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")
             request.query_params.add("X-Amz-Signature", signature.to_s)
           end

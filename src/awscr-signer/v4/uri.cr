@@ -1,7 +1,7 @@
 require "uri"
 
 module Awscr
-  module Signer
+  module Signer::V4
     # A Uri
     #
     # ```

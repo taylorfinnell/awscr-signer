@@ -1,7 +1,7 @@
 require "../../spec_helper"
 
 module Awscr
-  module Signer
+  module Signer::V4
     describe Signature do
       it "can support from a string" do
         time = Time.epoch(1375747200)

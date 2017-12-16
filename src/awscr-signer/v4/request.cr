@@ -2,7 +2,7 @@ require "openssl"
 require "openssl/digest"
 
 module Awscr
-  module Signer
+  module Signer::V4
     # Represents a request. It can have headers and query params.
     #
     # ```

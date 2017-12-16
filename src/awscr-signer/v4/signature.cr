@@ -1,5 +1,5 @@
 module Awscr
-  module Signer
+  module Signer::V4
     # Calculates an AWS V4 signature for a given object using the provided
     # scope
     #

@@ -7,7 +7,7 @@ module Awscr
           end
 
           def sign(string : String)
-            sig = Signature.new(@scope, string, @credentials, compute_digest: false)
+            sig = Signer::V4::Signature.new(@scope, string, @credentials, compute_digest: false)
             sig.to_s
           end
         end
