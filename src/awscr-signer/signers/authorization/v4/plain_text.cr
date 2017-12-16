@@ -1,7 +1,7 @@
 module Awscr
   module Signer
     module Signers
-      module Authorization
+      module Authorization::V4
         class PlainText
           def initialize(@scope : Scope, @credentials : Credentials)
           end

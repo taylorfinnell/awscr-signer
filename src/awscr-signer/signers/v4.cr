@@ -1,5 +1,5 @@
 require "http/request"
-require "./authorization/*"
+require "./authorization/v4/*"
 
 module Awscr
   module Signer
@@ -21,18 +21,18 @@ module Awscr
         end
 
         def sign(str : String)
-          authorization = Authorization::PlainText.new(@scope, @credentials)
+          authorization = Authorization::V4::PlainText.new(@scope, @credentials)
           authorization.sign(str)
         end
 
         # Sign an HTTP::Request
         def sign(request : HTTP::Request)
-          strategy = Authorization::Header.new(@scope, @credentials)
+          strategy = Authorization::V4::Header.new(@scope, @credentials)
           strategy.sign(request)
         end
 
         def presign(request)
-          strategy = Authorization::QueryString.new(@scope, @credentials)
+          strategy = Authorization::V4::QueryString.new(@scope, @credentials)
           strategy.sign(request)
         end
       end
