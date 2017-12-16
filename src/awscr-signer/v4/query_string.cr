@@ -17,8 +17,8 @@ module Awscr
       end
 
       # Returns the object as a string.
-      def to_s : String
-        @kvs.to_a.sort.map { |k, v| encoded_kv(k, v) }.join("&")
+      def to_s(io : IO)
+        io << @kvs.to_a.sort.map { |k, v| encoded_kv(k, v) }.join("&")
       end
 
       # :nodoc:

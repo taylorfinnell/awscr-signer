@@ -92,8 +92,8 @@ module Awscr
 
       # Returns the collection of headers separated by newline with a trailing
       # new line added
-      def to_s : String
-        map(&.to_s).join("\n") + "\n"
+      def to_s(io : IO)
+        io << map(&.to_s).join("\n") + "\n"
       end
     end
   end

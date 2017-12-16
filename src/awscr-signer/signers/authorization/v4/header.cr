@@ -28,7 +28,7 @@ module Awscr
               canonical_request.headers.add(Signer::Header.new(k, v))
             end
 
-            if @add_sha
+            if @add_sha # amazon test suite does not inlcude this
               request.headers["X-Amz-Content-Sha256"] =
                 canonical_request.digest
 

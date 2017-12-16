@@ -28,8 +28,8 @@ module Awscr
 
       # Compute the digest of the signing key and the string we are signing.
       # Returns the digest as a downcased hex string
-      def to_s
-        HMAC.hexdigest(signing_key, string_to_sign)
+      def to_s(io : IO)
+        io << HMAC.hexdigest(signing_key, string_to_sign)
       end
 
       private def string_to_sign

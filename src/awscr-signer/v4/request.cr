@@ -55,8 +55,8 @@ module Awscr
       end
 
       # Returns the request as a String.
-      def to_s
-        [
+      def to_s(io : IO)
+        io << [
           @method,
           @uri.path,
           query,

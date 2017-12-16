@@ -46,8 +46,8 @@ module Awscr
       end
 
       # Return the canonical string representation
-      def to_s : String
-        "#{key}:#{value}"
+      def to_s(io : IO)
+        io << "#{key}:#{value}"
       end
 
       def <=>(header : Header) : Int
