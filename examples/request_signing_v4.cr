@@ -12,7 +12,7 @@ def client(host, &block)
   client = HTTP::Client.new(host)
 
   client.before_request do |request|
-    signer = Awscr::Signer::V4.new(SERVICE, REGION, KEY, SECRET)
+    signer = Awscr::Signer::Signers::V4.new(SERVICE, REGION, KEY, SECRET)
     signer.sign(request)
   end
 
