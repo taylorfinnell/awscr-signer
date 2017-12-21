@@ -1,7 +1,7 @@
 require "../../spec_helper"
 
 module Awscr
-  module Signer
+  module Signer::V4
     describe Uri do
       it "can be created from a string" do
         curi = Uri.new("https://www.google.com/blah")

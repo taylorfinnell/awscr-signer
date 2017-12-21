@@ -23,8 +23,8 @@ module Awscr
       end
 
       # Returns the object in a "key:secret" form
-      def to_s
-        "#{@key}:#{@secret}"
+      def to_s(io : IO)
+        io << "#{@key}:#{@secret}"
       end
 
       def <=>(creds : Credentials)

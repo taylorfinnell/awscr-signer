@@ -1,7 +1,7 @@
 require "../../spec_helper"
 
 module Awscr
-  module Signer
+  module Signer::V4
     describe QueryString do
       it "encodes unreserved chars" do
         qs = QueryString.new

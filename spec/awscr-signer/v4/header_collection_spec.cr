@@ -1,7 +1,7 @@
 require "../../spec_helper"
 
 module Awscr
-  module Signer
+  module Signer::V4
     describe HeaderCollection do
       it "merges dupe headers into a single header with csv without caring about case" do
         headers = HeaderCollection.new
@@ -41,16 +41,16 @@ module Awscr
         headers = HeaderCollection.new
         headers.add("x", "y")
 
-        headers["x"].should eq Header.new("x", "y")
+        headers["x"]?.should eq Header.new("x", "y")
 
         headers.add("Y", "1")
-        (headers["Y"] != nil).should be_true
+        (headers["Y"]? != nil).should be_true
       end
 
       it "returns nil if no header found with []" do
         headers = HeaderCollection.new
 
-        headers["x"].should eq nil
+        headers["x"]?.should eq nil
       end
 
       it "merges dupe headers into a single header with csv handles multiline" do

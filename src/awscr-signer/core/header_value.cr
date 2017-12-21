@@ -35,8 +35,8 @@ module Awscr
       end
 
       # Return the header as a string
-      def to_s : String
-        @values.join(",")
+      def to_s(io : IO)
+        io << @values.join(",")
       end
 
       private def clean_value(value)

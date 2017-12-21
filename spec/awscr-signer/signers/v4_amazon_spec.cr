@@ -4,9 +4,8 @@ module Awscr
   module Signer
     module Signers
       def self.assert_request_signed(request : HTTP::Request, expected_auth_header : String)
-        signer = V4.new("service", "us-east-1",
-          "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
-        signer.sign(request, false)
+        signer = V4.new("service", "us-east-1", "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+        signer.sign(request, add_sha: false)
 
         request.headers["Authorization"].should eq(expected_auth_header)
       end

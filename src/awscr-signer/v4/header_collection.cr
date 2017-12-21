@@ -1,5 +1,5 @@
 module Awscr
-  module Signer
+  module Signer::V4
     # An array like structure that holds `Header` objects. Duplicated
     # headers are merged into a single header. The data structure maintains
     # proper ordering of the headers.
@@ -58,7 +58,7 @@ module Awscr
       end
 
       # Get a header by key, or nil of it does not exit
-      def [](key) : (Header | Nil)
+      def []?(key) : (Header | Nil)
         @headers.find { |g| g == key }
       end
 
@@ -92,8 +92,8 @@ module Awscr
 
       # Returns the collection of headers separated by newline with a trailing
       # new line added
-      def to_s : String
-        map(&.to_s).join("\n") + "\n"
+      def to_s(io : IO)
+        io << map(&.to_s).join("\n") + "\n"
       end
     end
   end

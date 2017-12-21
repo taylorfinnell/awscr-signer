@@ -16,8 +16,8 @@ module Awscr
       end
 
       # Returns the string form of the key
-      def to_s : String
-        @key.downcase
+      def to_s(io : IO)
+        io << @key.downcase
       end
 
       # Compare to another key

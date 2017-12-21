@@ -2,7 +2,7 @@ require "openssl"
 require "openssl/digest"
 
 module Awscr
-  module Signer
+  module Signer::V4
     # Represents a request. It can have headers and query params.
     #
     # ```
@@ -51,12 +51,12 @@ module Awscr
       end
 
       def full_path
-        "#{@uri.to_s}?#{query.to_s}"
+        "#{@uri}?#{query}"
       end
 
       # Returns the request as a String.
-      def to_s
-        [
+      def to_s(io : IO)
+        io << [
           @method,
           @uri.path,
           query,

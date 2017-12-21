@@ -22,8 +22,8 @@ module Awscr
       end
 
       # Return the `Scope` as a string
-      def to_s
-        [@date.ymd, region, service, "aws4_request"].join("/")
+      def to_s(io : IO)
+        io << [@date.ymd, region, service, "aws4_request"].join("/")
       end
     end
   end
