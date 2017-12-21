@@ -29,22 +29,22 @@ module Awscr
       def merge(value)
         values = extract_values(value)
         values.each do |v|
-          @values.push(clean_value(v))
+          @values.push(v)
         end
         values.any?
       end
 
       # Return the header as a string
-      def to_s(io : IO)
-        io << @values.join(",")
+      def to_s(io)
+        io << @values.map { |v| clean_value(v) }.join(",")
       end
 
       private def clean_value(value)
-        value.strip.gsub(/(\s)+/, " ")
+        value.strip.squeeze(" ")
       end
 
       private def extract_values(value : String)
-        value.split("\n").flat_map { |line| line.split(",") }
+        value.split("\n")
       end
     end
   end
