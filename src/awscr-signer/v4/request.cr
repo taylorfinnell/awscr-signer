@@ -51,7 +51,7 @@ module Awscr
       end
 
       def full_path
-        "#{@uri.to_s}?#{query.to_s}"
+        "#{@uri}?#{query}"
       end
 
       # Returns the request as a String.
