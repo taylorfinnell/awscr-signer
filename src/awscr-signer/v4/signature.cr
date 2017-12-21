@@ -35,7 +35,7 @@ module Awscr
       private def string_to_sign
         if @compute_digest
           [
-            Signer::ALGORITHM,
+            Signer::V4_ALGORITHM,
             @scope.date.iso8601,
             @scope,
             digest,

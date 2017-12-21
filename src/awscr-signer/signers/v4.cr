@@ -34,7 +34,7 @@ module Awscr
         end
 
         private def querystring_impl(request)
-          request.query_params.add("X-Amz-Algorithm", Signer::ALGORITHM)
+          request.query_params.add("X-Amz-Algorithm", Signer::V4_ALGORITHM)
           request.query_params.add("X-Amz-Credential", "#{@credentials.key}/#{@scope}")
           request.query_params.add("X-Amz-Date", @scope.date.iso8601)
 
@@ -89,7 +89,7 @@ module Awscr
           signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)
 
           request.headers["Authorization"] = [
-            [Signer::ALGORITHM, "Credential=#{@credentials.key}/#{@scope}"].join(" "),
+            [Signer::V4_ALGORITHM, "Credential=#{@credentials.key}/#{@scope}"].join(" "),
             "SignedHeaders=#{canonical_request.headers.keys.join(";")}",
             "Signature=#{signature}",
           ].join(", ")
