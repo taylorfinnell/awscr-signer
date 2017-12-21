@@ -10,28 +10,28 @@ module Awscr
     class HMAC
       INSTANCE = HMAC.new
 
-      def self.digest(key : (String | Slice(UInt8)), data : String)
-        INSTANCE.digest(key, data)
+      def self.digest(key : (String | Slice(UInt8)), data : String, algorithm = :sha256)
+        INSTANCE.digest(key, data, algorithm)
       end
 
-      def self.hexdigest(key : (String | Slice(UInt8)), data : String)
-        INSTANCE.hexdigest(key, data)
+      def self.hexdigest(key : (String | Slice(UInt8)), data : String, algorithm = :sha256)
+        INSTANCE.hexdigest(key, data, algorithm)
       end
 
-      def hexdigest(key : String, data : String)
-        OpenSSL::HMAC.hexdigest(:sha256, key, data)
+      def hexdigest(key : String, data : String, algorithm)
+        OpenSSL::HMAC.hexdigest(algorithm, key, data)
       end
 
-      def hexdigest(key : Slice(UInt8), data : String)
-        OpenSSL::HMAC.hexdigest(:sha256, key, data)
+      def hexdigest(key : Slice(UInt8), data : String, algorithm)
+        OpenSSL::HMAC.hexdigest(algorithm, key, data)
       end
 
-      def digest(key : String, data : String)
-        OpenSSL::HMAC.digest(:sha256, key, data)
+      def digest(key : String, data : String, algorithm)
+        OpenSSL::HMAC.digest(algorithm, key, data)
       end
 
-      def digest(key : Slice(UInt8), data : String)
-        OpenSSL::HMAC.digest(:sha256, key, data)
+      def digest(key : Slice(UInt8), data : String, algorithm)
+        OpenSSL::HMAC.digest(algorithm, key, data)
       end
     end
   end
