@@ -4,6 +4,25 @@ module Awscr
   module Signer
     module Signers
       describe V2 do
+        describe "presign" do
+          it "can presign" do
+            time = Time.new(2007, 3, 20, 3, 40, 20)
+
+            Timecop.freeze(time) do
+              request = HTTP::Request.new("GET", "/johnsmith/photos/puppy.jpg?Expires=1175139620", HTTP::Headers.new)
+
+              signer = V2.new("s3", "us-east-1",
+                "AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
+
+              signer.presign(request)
+
+              request.query_params["AWSAccessKeyId"]?.should eq("AKIAIOSFODNN7EXAMPLE")
+              request.query_params["Signature"]?.should eq("NpgCjnDzrM+WFzoENXmpNDUsSn8=")
+              request.query_params["Expires"]?.should eq("1175139620")
+            end
+          end
+        end
+
         describe "#sign" do
           it "can sign get requests" do
             time = Time.new(2007, 3, 27, 19, 36, 42)

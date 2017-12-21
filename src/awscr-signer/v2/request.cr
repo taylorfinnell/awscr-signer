@@ -18,7 +18,11 @@ module Awscr
           str << "#{@method}\n"
           str << "#{content_md5}\n"
           str << "#{content_type}\n"
-          str << "#{date}\n"
+          if expires
+            str << "#{expires}\n"
+          else
+            str << "#{date}\n"
+          end
           str << canonical_amz_headers
           str << canonical_resource_element
         end
@@ -31,6 +35,10 @@ module Awscr
         else
           nil
         end
+      end
+
+      private def expires
+        @query_params.find { |k, v| k == "Expires" }.try(&.last)
       end
 
       # :nodoc:

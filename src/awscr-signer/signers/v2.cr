@@ -46,8 +46,24 @@ module Awscr
           ].join
         end
 
-        def presign(request)
-          raise "#{self.class.name} can't presign a request"
+        def presign(request, expires = nil)
+          expires ||= Time.utc_now.epoch + 86_400
+
+          canonical_request = Signer::V2::Request.new(request.method,
+            URI.parse(request.path), request.body)
+
+          request.query_params.to_h.each do |k, v|
+            canonical_request.query_params.add(k, v)
+          end
+
+          request.headers.each do |k, v|
+            canonical_request.headers.add(Signer::Header.new(k, v))
+          end
+
+          signature = Signer::V2::Signature.new(@scope, canonical_request.to_s, @credentials)
+
+          request.query_params.add("AWSAccessKeyId", @credentials.key)
+          request.query_params.add("Signature", signature.to_s)
         end
       end
     end
