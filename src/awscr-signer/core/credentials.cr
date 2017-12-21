@@ -27,6 +27,8 @@ module Awscr
         io << "#{@key}:#{@secret}"
       end
 
+      # Compare two `Credentials` object, returns true if equal, false
+      # otherwise.
       def <=>(creds : Credentials)
         creds.to_s <=> to_s
       end
