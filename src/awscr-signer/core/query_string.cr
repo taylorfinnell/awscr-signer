@@ -1,5 +1,5 @@
 module Awscr
-  module Signer::V4
+  module Signer
     # Represents a `QueryString`. When converted to a String the keys and values
     # are sorted and URI encoded.
     #
@@ -9,7 +9,15 @@ module Awscr
     # qs.to_s # => "k&v"
     # ```
     class QueryString
+      include Enumerable({String, String})
+
       @kvs = {} of String => String
+
+      def each
+        @kvs.each do |k, v|
+          yield({k, v})
+        end
+      end
 
       # Adds a key and value to the query string
       def add(k : String, v : String)
