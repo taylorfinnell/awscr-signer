@@ -35,6 +35,13 @@ module Awscr
           request = Request.new("GET", URI.parse("/"), "")
           request.host.should eq(nil)
         end
+
+        it "returns host if set" do
+          request = Request.new("GET", URI.parse("/"), "")
+          request.headers.add("Host", "test")
+
+          request.host.should eq("test")
+        end
       end
 
       describe "full_path" do
