@@ -38,7 +38,7 @@ module Awscr
         # be calculated
         if @compute_digest
           [
-            Signer::V4_ALGORITHM,
+            Signer::ALGORITHM,
             @scope.date.iso8601,
             @scope,
             digest,

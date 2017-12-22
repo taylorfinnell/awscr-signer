@@ -6,6 +6,6 @@ require "./awscr-signer/signers/*"
 module Awscr
   # Implementation of AWS request signing
   module Signer
-    V4_ALGORITHM = "AWS4-HMAC-SHA256"
+    ALGORITHM = "AWS4-HMAC-SHA256"
   end
 end
