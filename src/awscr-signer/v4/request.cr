@@ -33,6 +33,7 @@ module Awscr
       @uri : Uri
       @digest : String
       @body : IO
+      @query : QueryString
 
       def initialize(method : String, uri : URI, body : IO | String | Nil)
         raise Exception.new("You may not give a URI with query params, they are
@@ -47,7 +48,7 @@ module Awscr
       end
 
       def host
-        @uri.host
+        @headers["Host"]?.try(&.value)
       end
 
       def full_path

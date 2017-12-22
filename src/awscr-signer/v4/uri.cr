@@ -32,13 +32,15 @@ module Awscr
         io << "#{scheme}://#{@uri.host}#{@uri.path}"
       end
 
+      # Returns the host of the UI
       def host
         @uri.host
       end
 
+      # Returns path of the `Uri`, normalizes the path, and encode the path as
+      # required by version 4
       def path
-        # Allows input of /test ing/ and /test%20ing/
-        uri = URI.parse(@uri.path.to_s).normalize
+        uri = @uri.normalize
         path = uri.path.to_s
         path = "/" if path.blank?
         self.class.encode(path)

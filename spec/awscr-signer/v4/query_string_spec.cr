@@ -3,6 +3,13 @@ require "../../spec_helper"
 module Awscr
   module Signer::V4
     describe QueryString do
+      it "is enumerable" do
+        qs = QueryString.new
+        qs.add("a", "b")
+
+        qs.to_a.should eq([{"a", "b"}])
+      end
+
       it "encodes unreserved chars" do
         qs = QueryString.new
         qs.add("@#$%^&+", "/,?><`\";:\\|][{}")

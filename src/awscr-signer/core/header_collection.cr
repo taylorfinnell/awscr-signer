@@ -1,5 +1,5 @@
 module Awscr
-  module Signer::V4
+  module Signer
     # An array like structure that holds `Header` objects. Duplicated
     # headers are merged into a single header. The data structure maintains
     # proper ordering of the headers.

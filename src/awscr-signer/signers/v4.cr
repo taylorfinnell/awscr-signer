@@ -39,7 +39,7 @@ module Awscr
           request.query_params.add("X-Amz-Date", @scope.date.iso8601)
 
           canonical_request = Signer::V4::Request.new(request.method,
-                                                      URI.parse(request.path), request.body)
+            URI.parse(request.path), request.body)
 
           request.query_params.to_h.each do |k, v|
             canonical_request.query.add(k, v)
@@ -68,7 +68,7 @@ module Awscr
           end
 
           canonical_request = Signer::V4::Request.new(request.method,
-                                                      URI.parse(request.path), request.body)
+            URI.parse(request.path), request.body)
 
           request.query_params.to_h.each do |k, v|
             canonical_request.query.add(k, v)
@@ -83,7 +83,7 @@ module Awscr
               canonical_request.digest
 
             canonical_request.headers.add("X-Amz-Content-Sha256",
-                                          canonical_request.digest)
+              canonical_request.digest)
           end
 
           signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)

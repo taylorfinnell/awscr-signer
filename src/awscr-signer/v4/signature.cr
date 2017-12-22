@@ -32,7 +32,10 @@ module Awscr
         io << HMAC.hexdigest(signing_key, string_to_sign)
       end
 
+      # :nodoc:
       private def string_to_sign
+        # POST uploads in a browser are an example of when the digest would not
+        # be calculated
         if @compute_digest
           [
             Signer::ALGORITHM,
@@ -45,6 +48,7 @@ module Awscr
         end
       end
 
+      # :nodoc:
       private def digest
         digest = OpenSSL::Digest.new("SHA256")
         digest.update(@string)
