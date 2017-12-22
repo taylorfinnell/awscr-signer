@@ -17,9 +17,16 @@ dependencies:
 
 ## Usage
 
-**Create a `Signer::V4` object.**
+**Create a `Signer::Signers::V4` object.**
 ```crystal
-signer = Awscr::Signer::V4.new("service", "region", "key", "secret")
+signer = Awscr::Signer::Signers::V4.new("service", "region", "key", "secret")
+```
+
+or
+
+**Create a `Signer::Signers::V2` object.**
+```crystal
+signer = Awscr::Signer::Signers::V2.new("service", "region", "key", "secret")
 ```
 
 **Signing an `HTTP::Request`.**
