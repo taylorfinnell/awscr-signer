@@ -3,5 +3,5 @@ module Awscr
   MINOR = "4"
   PATCH = "0"
 
-  [MAJOR, MINOR, PATCH].join(".")
+  VERSION = [MAJOR, MINOR, PATCH].join(".")
 end
