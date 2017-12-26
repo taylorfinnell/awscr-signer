@@ -10,7 +10,7 @@ module Awscr
       end
 
       it "alerts of ignored query params" do
-        expect_raises do
+        expect_raises Exception do
           Request.new("GET", URI.parse("http://google.com?test=1"), "")
         end
       end
