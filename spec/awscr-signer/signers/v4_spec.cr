@@ -13,6 +13,16 @@ module Awscr
         end
 
         describe "#sign" do
+          it "escapes the request path" do
+            request = HTTP::Request.new("GET", "/hello world", HTTP::Headers.new, "BODY")
+
+            signer = V4.new("s3", "us-east-1",
+              "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+            signer.sign(request)
+
+            request.path.should eq("/hello%20world")
+          end
+
           it "adds content-sha256 header by default" do
             request = HTTP::Request.new("GET", "/", HTTP::Headers.new, "BODY")
 

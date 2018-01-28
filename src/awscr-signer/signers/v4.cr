@@ -86,6 +86,8 @@ module Awscr
               canonical_request.digest)
           end
 
+          request.path = canonical_request.path
+
           signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)
 
           request.headers["Authorization"] = [

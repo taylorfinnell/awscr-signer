@@ -47,6 +47,10 @@ module Awscr
         @digest = build_body_digest
       end
 
+      def path
+        @uri.path
+      end
+
       def host
         @headers["Host"]?.try(&.value)
       end
