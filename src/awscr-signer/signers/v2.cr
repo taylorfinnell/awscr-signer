@@ -6,18 +6,20 @@ module Awscr
       class V2
         include Interface
 
-        def initialize(service : String, region : String, aws_access_key : String, aws_secret_key : String)
-          @scope = Signer::Scope.new(region, service)
+        def initialize(@service : String, @region : String, @aws_access_key : String, @aws_secret_key : String)
           @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 
         def sign(string : String)
-          sig = Signer::V2::Signature.new(@scope, string, @credentials)
+          scope = Signer::Scope.new(@region, @service)
+          sig = Signer::V2::Signature.new(scope, string, @credentials)
           sig.to_s
         end
 
         # Sign an HTTP::Request
         def sign(request : HTTP::Request)
+          scope = Signer::Scope.new(@region, @service)
+
           # Replace "Date" with X-Amz-Date.
           # Only if X-Amz-Date is not already set. AWS prefers
           # X-Amz-Date
@@ -25,7 +27,7 @@ module Awscr
             request.headers["Date"] ||= date
           else
             # Default it to the given scope time, if not set
-            request.headers["Date"] ||= @scope.date.rfc1123z
+            request.headers["Date"] ||= scope.date.rfc1123z
           end
 
           canonical_request = Signer::V2::Request.new(request.method,
@@ -39,7 +41,7 @@ module Awscr
             canonical_request.headers.add(Signer::Header.new(k, v))
           end
 
-          signature = Signer::V2::Signature.new(@scope, canonical_request.to_s, @credentials)
+          signature = Signer::V2::Signature.new(scope, canonical_request.to_s, @credentials)
 
           request.headers["Authorization"] = [
             "AWS ", @credentials.key, ":", signature,
@@ -47,6 +49,8 @@ module Awscr
         end
 
         def presign(request, expires = nil)
+          scope = Signer::Scope.new(@region, @service)
+
           expires ||= Time.utc_now.epoch + 86_400
 
           canonical_request = Signer::V2::Request.new(request.method,
@@ -60,7 +64,7 @@ module Awscr
             canonical_request.headers.add(Signer::Header.new(k, v))
           end
 
-          signature = Signer::V2::Signature.new(@scope, canonical_request.to_s, @credentials)
+          signature = Signer::V2::Signature.new(scope, canonical_request.to_s, @credentials)
 
           request.query_params.add("AWSAccessKeyId", @credentials.key)
           request.query_params.add("Signature", signature.to_s)

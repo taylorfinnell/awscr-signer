@@ -14,13 +14,13 @@ module Awscr
       class V4
         include Interface
 
-        def initialize(service : String, region : String, aws_access_key : String, aws_secret_key : String)
-          @scope = Signer::Scope.new(region, service)
+        def initialize(@service : String, @region : String, @aws_access_key : String, @aws_secret_key : String)
           @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 
         def sign(string : String)
-          sig = Signer::V4::Signature.new(@scope, string, @credentials, compute_digest: false)
+          scope = Signer::Scope.new(@region, @service)
+          sig = Signer::V4::Signature.new(scope, string, @credentials, compute_digest: false)
           sig.to_s
         end
 
@@ -34,9 +34,10 @@ module Awscr
         end
 
         private def querystring_impl(request)
+          scope = Signer::Scope.new(@region, @service)
           request.query_params.add("X-Amz-Algorithm", Signer::ALGORITHM)
-          request.query_params.add("X-Amz-Credential", "#{@credentials.key}/#{@scope}")
-          request.query_params.add("X-Amz-Date", @scope.date.iso8601)
+          request.query_params.add("X-Amz-Credential", "#{@credentials.key}/#{scope}")
+          request.query_params.add("X-Amz-Date", scope.date.iso8601)
 
           canonical_request = Signer::V4::Request.new(request.method,
             URI.parse(request.path), request.body)
@@ -51,12 +52,13 @@ module Awscr
 
           canonical_request.query.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")
 
-          signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)
+          signature = Signer::V4::Signature.new(scope, canonical_request.to_s, @credentials)
           request.query_params.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")
           request.query_params.add("X-Amz-Signature", signature.to_s)
         end
 
         private def header_impl(request, add_sha)
+          scope = Signer::Scope.new(@region, @service)
           # Replace "Date" with X-Amz-Date.
           # Only if X-Amz-Date is not already set. AWS prefers
           # X-Amz-Date
@@ -64,7 +66,7 @@ module Awscr
             request.headers["X-Amz-Date"] ||= date
           else
             # Default it to the given scope time, if not set
-            request.headers["X-Amz-Date"] ||= @scope.date.iso8601
+            request.headers["X-Amz-Date"] ||= scope.date.iso8601
           end
 
           canonical_request = Signer::V4::Request.new(request.method,
@@ -86,10 +88,10 @@ module Awscr
               canonical_request.digest)
           end
 
-          signature = Signer::V4::Signature.new(@scope, canonical_request.to_s, @credentials)
+          signature = Signer::V4::Signature.new(scope, canonical_request.to_s, @credentials)
 
           request.headers["Authorization"] = [
-            [Signer::ALGORITHM, "Credential=#{@credentials.key}/#{@scope}"].join(" "),
+            [Signer::ALGORITHM, "Credential=#{@credentials.key}/#{scope}"].join(" "),
             "SignedHeaders=#{canonical_request.headers.keys.join(";")}",
             "Signature=#{signature}",
           ].join(", ")
