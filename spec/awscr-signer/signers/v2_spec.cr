@@ -6,7 +6,7 @@ module Awscr
       describe V2 do
         describe "presign" do
           it "can presign" do
-            time = Time.new(2007, 3, 20, 3, 40, 20)
+            time = Time.utc(2007, 3, 20, 3, 40, 20)
 
             Timecop.freeze(time) do
               request = HTTP::Request.new("GET", "/johnsmith/photos/puppy.jpg?Expires=1175139620", HTTP::Headers.new)
@@ -25,7 +25,7 @@ module Awscr
 
         describe "#sign" do
           it "can sign get requests" do
-            time = Time.new(2007, 3, 27, 19, 36, 42)
+            time = Time.utc(2007, 3, 27, 19, 36, 42)
 
             Timecop.freeze(time) do
               request = HTTP::Request.new("GET", "/johnsmith/photos/puppy.jpg", HTTP::Headers.new)
@@ -40,7 +40,7 @@ module Awscr
           end
 
           it "can sign put requests with no body" do
-            time = Time.new(2007, 3, 27, 21, 15, 45)
+            time = Time.utc(2007, 3, 27, 21, 15, 45)
 
             Timecop.freeze(time) do
               request = HTTP::Request.new("PUT", "/johnsmith/photos/puppy.jpg", HTTP::Headers{"Content-Type" => "image/jpeg"})
@@ -55,7 +55,7 @@ module Awscr
           end
 
           it "can sign get with query params" do
-            time = Time.new(2007, 3, 27, 19, 42, 41)
+            time = Time.utc(2007, 3, 27, 19, 42, 41)
 
             Timecop.freeze(time) do
               request = HTTP::Request.new("GET", "/johnsmith/?prefix=photos&max-keys=50&marker=puppy", HTTP::Headers.new)
@@ -70,7 +70,7 @@ module Awscr
           end
 
           it "can sign with sub resources" do
-            time = Time.new(2007, 3, 27, 19, 44, 46)
+            time = Time.utc(2007, 3, 27, 19, 44, 46)
 
             Timecop.freeze(time) do
               request = HTTP::Request.new("GET", "/johnsmith/?acl", HTTP::Headers.new)
@@ -85,7 +85,7 @@ module Awscr
           end
 
           it "can sign deletes" do
-            time = Time.new(2007, 3, 27, 21, 20, 26)
+            time = Time.utc(2007, 3, 27, 21, 20, 26)
 
             Timecop.freeze(time) do
               request = HTTP::Request.new("DELETE", "/johnsmith/photos/puppy.jpg", HTTP::Headers.new)
@@ -100,7 +100,7 @@ module Awscr
           end
 
           it "signs cname style requests" do
-            time = Time.new(2007, 3, 27, 21, 6, 8)
+            time = Time.utc(2007, 3, 27, 21, 6, 8)
 
             Timecop.freeze(time) do
               headers = HTTP::Headers.new
@@ -128,7 +128,7 @@ module Awscr
           end
 
           it "signs plain get" do
-            time = Time.new(2007, 3, 28, 1, 29, 59)
+            time = Time.utc(2007, 3, 28, 1, 29, 59)
 
             Timecop.freeze(time) do
               request = HTTP::Request.new("GET", "/", HTTP::Headers.new)
@@ -143,7 +143,7 @@ module Awscr
           end
 
           it "signs unicode" do
-            time = Time.new(2007, 3, 28, 1, 49, 49)
+            time = Time.utc(2007, 3, 28, 1, 49, 49)
 
             Timecop.freeze(time) do
               request = HTTP::Request.new("GET", "/dictionary/fran%C3%A7ais/pr%c3%a9f%c3%a8re", HTTP::Headers.new)
