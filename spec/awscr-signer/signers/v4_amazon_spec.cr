@@ -13,7 +13,7 @@ module Awscr
       describe V4 do
         describe "signing an HTTP::Request" do
           Spec.before_each do
-            Timecop.freeze(Time.epoch(1440938160))
+            Timecop.freeze(Time.unix(1440938160))
           end
 
           Spec.after_each do
