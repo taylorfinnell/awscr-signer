@@ -23,7 +23,7 @@ module Awscr
       end
 
       it "can be represented as a string" do
-        time = Time.epoch(1440938160)
+        time = Time.unix(1440938160)
         scope = Scope.new("region", "service", time)
 
         scope.to_s.should eq "20150830/region/service/aws4_request"

@@ -4,7 +4,7 @@ module Awscr
   module Signer::V4
     describe Signature do
       it "can support from a string" do
-        time = Time.epoch(1375747200)
+        time = Time.unix(1375747200)
         key = "AKIAIOSFODNN7EXAMPLE"
         secret = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         region = "us-east-1"
@@ -19,7 +19,7 @@ module Awscr
       end
 
       it "can be a string" do
-        time = Time.epoch(1440938160)
+        time = Time.unix(1440938160)
         key = "AKIDEXAMPLE"
         secret = "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY"
         region = "us-east-1"
