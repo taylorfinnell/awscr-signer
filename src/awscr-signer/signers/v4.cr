@@ -14,7 +14,7 @@ module Awscr
       class V4
         include Interface
 
-        def initialize(@service : String, @region : String, @aws_access_key : String, @aws_secret_key : String)
+        def initialize(@service : String, @region : String, @aws_access_key : String, @aws_secret_key : String, @amz_security_token : String? = nil)
           @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 
@@ -59,6 +59,10 @@ module Awscr
 
         private def header_impl(request, add_sha)
           scope = Signer::Scope.new(@region, @service)
+
+          @amz_security_token.try do |token|
+            request.headers["X-Amz-Security-Token"] = token
+          end
           # Replace "Date" with X-Amz-Date.
           # Only if X-Amz-Date is not already set. AWS prefers
           # X-Amz-Date
