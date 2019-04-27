@@ -4,7 +4,7 @@ module Awscr
   module Signer
     describe HMAC do
       it "can support other alogs" do
-        HMAC.hexdigest("test", "test", :sha1).should eq("0c94515c15e5095b8a87a50ba0df3bf38ed05fe6")
+        HMAC.hexdigest("test", "test", OpenSSL::Algorithm::SHA1).should eq("0c94515c15e5095b8a87a50ba0df3bf38ed05fe6")
       end
 
       it "can compute digests" do
