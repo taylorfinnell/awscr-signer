@@ -10,11 +10,11 @@ module Awscr
     class HMAC
       INSTANCE = HMAC.new
 
-      def self.digest(key : (String | Slice(UInt8)), data : String, algorithm : OpenSSL::Algorithm = :sha256)
+      def self.digest(key : (String | Slice(UInt8)), data : String, algorithm : OpenSSL::Algorithm = OpenSSL::Algorithm::SHA256)
         INSTANCE.digest(key, data, algorithm)
       end
 
-      def self.hexdigest(key : (String | Slice(UInt8)), data : String, algorithm : OpenSSL::Algorithm = :sha256)
+      def self.hexdigest(key : (String | Slice(UInt8)), data : String, algorithm : OpenSSL::Algorithm = OpenSSL::Algorithm::SHA256)
         INSTANCE.hexdigest(key, data, algorithm)
       end
 
