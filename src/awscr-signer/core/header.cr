@@ -10,7 +10,8 @@ module Awscr
     # header.to_s # => k:v,value2
     # ```
     class Header
-      include Comparable(Header | String)
+      include Comparable(Header)
+      include Comparable(String)
 
       @values = [] of String
 
