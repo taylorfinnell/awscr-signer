@@ -11,7 +11,6 @@ module Awscr
     # ```
     class HeaderCollection
       include Enumerable(Header)
-      include Indexable(Header)
 
       # List of headers names not allowed in the collection.
       BLACKLIST_HEADERS = [
