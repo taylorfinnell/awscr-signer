@@ -31,7 +31,7 @@ module Awscr
 
       # :nodoc:
       private def encoded_kv(k, v)
-        "#{URI.escape(k)}=#{URI.escape(v)}"
+        "#{URI.encode(k)}=#{URI.encode(v)}"
       end
     end
   end
