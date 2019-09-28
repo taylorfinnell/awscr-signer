@@ -9,4 +9,4 @@ license: MIT
 
 development_dependencies:
   timecop:
-    github: waterlink/timecop.cr
+    github: crystal-community/timecop.cr

@@ -2,9 +2,10 @@ require "spec"
 require "../src/awscr-signer"
 require "timecop"
 
-# Monkey patch Time\Timecop
-struct Time
-  def self.utc_now
-    Timecop.now
+Timecop.safe_mode = true
+
+def self.with_time_freeze(time, &block)
+  Timecop.freeze(time) do
+    block.call
   end
 end
