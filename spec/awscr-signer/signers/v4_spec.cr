@@ -5,7 +5,7 @@ module Awscr
     module Signers
       describe V4 do
         Spec.before_each do
-          Timecop.freeze(Time.new(2015, 1, 1))
+          Timecop.freeze(Time.local(2015, 1, 1))
         end
 
         Spec.after_each do
@@ -27,7 +27,7 @@ module Awscr
           end
 
           it "replaces date header with x-amz-date" do
-            time = Time.new(2015, 1, 1)
+            time = Time.local(2015, 1, 1)
 
             request = HTTP::Request.new("GET", "/")
             request.headers.add("Date", Signer::Date.new(time).iso8601)
@@ -42,8 +42,8 @@ module Awscr
           end
 
           it "does not overwrite x-amz-date with date if x-amz-date is set" do
-            time = Time.new(2015, 1, 1)
-            time2 = Time.new(2015, 2, 1)
+            time = Time.local(2015, 1, 1)
+            time2 = Time.local(2015, 2, 1)
 
             request = HTTP::Request.new("GET", "/")
             request.headers.add("X-Amz-Date", Signer::Date.new(time2).iso8601)
@@ -59,7 +59,7 @@ module Awscr
           end
 
           it "sets x-amz-date if not set and no date given" do
-            time = Time.new(2015, 1, 1)
+            time = Time.local(2015, 1, 1)
 
             request = HTTP::Request.new("GET", "/")
 
@@ -73,7 +73,7 @@ module Awscr
           end
 
           it "does not overwrite x-amx-date if no date is given and it is set" do
-            time = Time.new(2015, 2, 1)
+            time = Time.local(2015, 2, 1)
 
             request = HTTP::Request.new("GET", "/")
             request.headers.add("X-Amz-Date", Signer::Date.new(time).iso8601)
