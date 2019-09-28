@@ -31,7 +31,7 @@ module Awscr
 
       # :nodoc:
       private def encoded_kv(k, v)
-        "#{URI.encode(k)}=#{URI.encode(v)}"
+        "#{URI.encode_www_form(k, space_to_plus: false)}=#{URI.encode_www_form(v, space_to_plus: false)}"
       end
     end
   end
