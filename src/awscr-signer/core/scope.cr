@@ -15,7 +15,7 @@ module Awscr
       # The date used in the scope
       getter date : Date
 
-      def initialize(region : String, service : String, timestamp : Time = Time.utc_now)
+      def initialize(region : String, service : String, timestamp : Time = Time.utc)
         @date = Awscr::Signer::Date.new(timestamp)
         @region = region
         @service = service
