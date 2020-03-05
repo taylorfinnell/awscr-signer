@@ -14,7 +14,7 @@ module Awscr
       @query = QueryString.new
 
       def self.encode(path : String)
-        URI.encode(path)
+        URI.escape(path)
       end
 
       # The path must be non encoded.
