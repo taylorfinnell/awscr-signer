@@ -14,7 +14,9 @@ module Awscr
       @query = QueryString.new
 
       def self.encode(path : String)
-        URI.encode(path)
+        String.build do |io|
+          URI.encode(path, io) { |byte| URI.unreserved?(byte) || byte.chr == '/' }
+        end
       end
 
       # The path must be non encoded.
