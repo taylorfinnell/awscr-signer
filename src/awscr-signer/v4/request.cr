@@ -30,17 +30,14 @@ module Awscr
       # The request body
       getter body
 
-      @uri : Uri
+      @path : String
       @digest : String
       @body : IO
       @query : QueryString
+      @encode : Bool
 
-      def initialize(method : String, uri : URI, body : IO | String | Nil)
-        raise Exception.new("You may not give a URI with query params, they are
-                            ignored. Use #query object intead") unless uri.query.nil?
-
-        @method = method
-        @uri = Uri.new(uri)
+      def initialize(@method : String, path : String, body : IO | String | Nil, @encode=true)
+        @path = build_path(path)
         @query = QueryString.new
         @headers = HeaderCollection.new
         @body = build_body(body)
@@ -52,14 +49,14 @@ module Awscr
       end
 
       def full_path
-        "#{@uri}?#{query}"
+        "#{@path}?#{query}"
       end
 
       # Returns the request as a String.
       def to_s(io : IO)
         io << [
           @method,
-          @uri.path,
+          @path,
           query,
           headers,
           @headers.keys.join(";"),
@@ -80,6 +77,27 @@ module Awscr
           body.rewind
 
           digest.hexdigest
+        end
+      end
+
+      # Encodes the path except '/' and '~'
+      def self.encode_path(path)
+        String.build do |io|
+          URI.encode(path, io) { |byte| URI.unreserved?(byte) || byte.chr == '/' || byte.chr == '~' }
+        end
+      end
+
+      private def build_path(path)
+        return "/" if path.blank?
+        uri = URI.parse(path)
+        raise Exception.new("You may not give a URI with query params, they are
+                            ignored. Use #query object intead") unless uri.query.nil?
+
+        path = uri.normalize.path
+        if @encode
+          self.class.encode_path(path)
+        else
+          path
         end
       end
 
