@@ -5,7 +5,7 @@ module Awscr
     module Signers
       describe V4 do
         describe "#sign" do
-          time = Time.local(2015, 1, 1)
+          time = Time.unix(1420070400)
 
           it "adds content-sha256 header by default" do
             with_time_freeze(time) do
