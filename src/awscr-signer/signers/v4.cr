@@ -25,22 +25,22 @@ module Awscr
         end
 
         # Sign an HTTP::Request
-        def sign(request : HTTP::Request, add_sha = true)
-          header_impl(request, add_sha)
+        def sign(request : HTTP::Request, add_sha = true, encode_path = true)
+          header_impl(request, add_sha, encode_path)
         end
 
-        def presign(request)
-          querystring_impl(request)
+        def presign(request, encode_path = true)
+          querystring_impl(request, encode_path)
         end
 
-        private def querystring_impl(request)
+        private def querystring_impl(request, encode_path)
           scope = Signer::Scope.new(@region, @service)
           request.query_params.add("X-Amz-Algorithm", Signer::ALGORITHM)
           request.query_params.add("X-Amz-Credential", "#{@credentials.key}/#{scope}")
           request.query_params.add("X-Amz-Date", scope.date.iso8601)
 
           canonical_request = Signer::V4::Request.new(request.method,
-            URI.parse(request.path), request.body)
+            request.path, request.body, encode_path)
 
           request.query_params.to_h.each do |k, v|
             canonical_request.query.add(k, v)
@@ -57,7 +57,7 @@ module Awscr
           request.query_params.add("X-Amz-Signature", signature.to_s)
         end
 
-        private def header_impl(request, add_sha)
+        private def header_impl(request, add_sha, encode_path)
           scope = Signer::Scope.new(@region, @service)
 
           @amz_security_token.try do |token|
@@ -74,7 +74,7 @@ module Awscr
           end
 
           canonical_request = Signer::V4::Request.new(request.method,
-            URI.parse(request.path), request.body)
+            request.path, request.body, encode_path)
 
           request.query_params.to_h.each do |k, v|
             canonical_request.query.add(k, v)
