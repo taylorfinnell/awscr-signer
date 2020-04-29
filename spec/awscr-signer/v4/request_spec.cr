@@ -44,15 +44,6 @@ module Awscr
         end
       end
 
-      describe "full_path" do
-        it "returns the full url incl query string" do
-          request = Request.new("GET", "http://google.com", "")
-          request.query.add("blah", "1")
-
-          request.full_path.should eq("http://google.com?blah=1")
-        end
-      end
-
       describe "to_s" do
         it "returns a valid  string" do
           body = ""

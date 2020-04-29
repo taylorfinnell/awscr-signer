@@ -48,10 +48,6 @@ module Awscr
         @headers["Host"]?.try(&.value)
       end
 
-      def full_path
-        "#{@path}?#{query}"
-      end
-
       # Returns the request as a String.
       def to_s(io : IO)
         io << [
