@@ -17,7 +17,7 @@ module Awscr
 
               digest = OpenSSL::Digest.new("SHA256")
               digest.update("BODY")
-              request.headers["X-Amz-Content-Sha256"].should eq(digest.hexdigest)
+              request.headers["X-Amz-Content-Sha256"].should eq(digest.final.hexstring)
               request.headers["Authorization"].should eq("AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150101/us-east-1/s3/aws4_request, SignedHeaders=x-amz-content-sha256;x-amz-date, Signature=791f608d3f2173e73123252f6d3eae407fedbe55d8d62d06fc45bd5ea7584fc0")
             end
           end

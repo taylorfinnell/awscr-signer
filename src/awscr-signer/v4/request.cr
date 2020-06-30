@@ -72,7 +72,7 @@ module Awscr
           end
           body.rewind
 
-          digest.hexdigest
+          digest.final.hexstring
         end
       end
 

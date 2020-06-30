@@ -52,7 +52,7 @@ module Awscr
       private def digest
         digest = OpenSSL::Digest.new("SHA256")
         digest.update(@string)
-        digest.hexdigest
+        digest.final.hexstring
       end
 
       # :nodoc:
