@@ -1,6 +1,6 @@
 name: awscr-signer
 version: 0.8.1
-crystal: 0.31.0
+crystal: ">=0.31.0"
 
 authors:
   - Taylor Finnell <tmfinnell@gmail.com>
