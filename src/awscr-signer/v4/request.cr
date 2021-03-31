@@ -1,3 +1,4 @@
+require "digest"
 require "openssl"
 require "openssl/digest"
 
@@ -36,7 +37,7 @@ module Awscr
       @query : QueryString
       @encode : Bool
 
-      def initialize(@method : String, path : String, body : IO | String | Nil, @encode=true)
+      def initialize(@method : String, path : String, body : IO | String | Nil, @encode = true)
         @path = build_path(path)
         @query = QueryString.new
         @headers = HeaderCollection.new
@@ -60,19 +61,27 @@ module Awscr
         ].map(&.to_s).join("\n")
       end
 
+      private def digest(io)
+        {% if compare_versions(Crystal::VERSION, "0.35.0") < 0 %}
+          sha = OpenSSL::Digest.new("SHA256")
+        {% else %}
+          sha = Digest::SHA256.new
+        {% end %}
+        {% verbatim do %}
+          buffer = uninitialized UInt8[1_048_576] # 1mb
+          while (read_bytes = io.read(buffer.to_slice)) > 0
+            sha << buffer.to_slice[0, read_bytes]
+          end
+          io.rewind
+          sha.final.hexstring
+        {% end %}
+      end
+
       private def build_body_digest
         if body.to_s == "UNSIGNED-PAYLOAD"
           body.to_s
         else
-          digest = OpenSSL::Digest.new("SHA256")
-
-          buffer = uninitialized UInt8[1_048_576] # 1mb
-          while (read_bytes = body.read(buffer.to_slice)) > 0
-            digest << buffer.to_slice[0, read_bytes]
-          end
-          body.rewind
-
-          digest.final.hexstring
+          digest(body)
         end
       end
 
