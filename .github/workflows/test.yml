@@ -38,6 +38,8 @@ jobs:
         run: crystal spec -v --error-trace
 
       - name: "[Test] Smoke tests"
+        env:
+          LOG_LEVEL: TRACE
         run: |
           crystal run --release --stats --progress examples/request_signing_v4.cr
           crystal run --release --stats --progress examples/request_signing_v2.cr
