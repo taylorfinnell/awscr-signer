@@ -41,8 +41,8 @@ module Awscr
       end
 
       # Compare the `Date` object to a `Time` object
-      def <=>(time : Time)
-        @timestamp <=> time
+      def <=>(other : Time)
+        @timestamp <=> other
       end
 
       def_equals @timestamp

@@ -55,8 +55,8 @@ module Awscr
         header.key <=> key
       end
 
-      def <=>(string : String) : Int
-        Header.new(string, "") <=> self
+      def <=>(other : String) : Int
+        Header.new(other, "") <=> self
       end
     end
   end

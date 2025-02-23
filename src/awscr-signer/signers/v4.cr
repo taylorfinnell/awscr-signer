@@ -6,7 +6,7 @@ module Awscr
       # Signs a Crystal HTTP::Request using a given scope.
       #
       # ```
-      # signer = Signer::V4.new("s3", "region", "key", "secret")
+      # signer = Signer::V4.new(service: "s3", region: "region", aws_access_key: "key", aws_secret_key: "secret")
       # signer.sign(request)
       # signer.sign("some string")
       # signer.presign(request)
@@ -14,7 +14,11 @@ module Awscr
       class V4
         include Interface
 
-        def initialize(@service : String, @region : String, @aws_access_key : String, @aws_secret_key : String, @amz_security_token : String? = nil)
+        def initialize(@service : String,
+                       @region : String,
+                       @aws_access_key : String,
+                       @aws_secret_key : String,
+                       @amz_security_token : String? = nil)
           @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 

@@ -21,8 +21,8 @@ module Awscr
       end
 
       # Compare to another key
-      def <=>(key : HeaderKey) : Int
-        to_s <=> key.to_s
+      def <=>(other : HeaderKey) : Int
+        to_s <=> other.to_s
       end
     end
   end
