@@ -26,14 +26,12 @@ module Awscr
       getter date
 
       # The computed digest of the request body
-      getter digest
+      getter digest : String
 
       # The request body
-      getter body
+      getter body : IO
 
       @path : String
-      @digest : String
-      @body : IO
       @query : QueryString
       @encode : Bool
 
