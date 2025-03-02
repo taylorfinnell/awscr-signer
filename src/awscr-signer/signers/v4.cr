@@ -56,6 +56,8 @@ module Awscr
 
           canonical_request.query.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")
 
+          Log.trace { "querystring_impl > Creating signature for canonical_request:\n#{canonical_request}\n" }
+
           signature = Signer::V4::Signature.new(scope, canonical_request.to_s, @credentials)
           request.query_params.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")
           request.query_params.add("X-Amz-Signature", signature.to_s)
@@ -95,6 +97,8 @@ module Awscr
             canonical_request.headers.add("X-Amz-Content-Sha256",
               canonical_request.digest)
           end
+
+          Log.trace { "header_impl > Creating signature for canonical_request:\n#{canonical_request}\n" }
 
           signature = Signer::V4::Signature.new(scope, canonical_request.to_s, @credentials)
 
