@@ -85,7 +85,7 @@ module Awscr
       end
 
       # Yields each header
-      def each
+      def each(&)
         @headers.each { |header| yield header }
       end
 
