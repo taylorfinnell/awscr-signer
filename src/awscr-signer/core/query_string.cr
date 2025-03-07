@@ -13,7 +13,7 @@ module Awscr
 
       @kvs = {} of String => String
 
-      def each
+      def each(&)
         @kvs.each do |k, v|
           yield({k, v})
         end

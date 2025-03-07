@@ -8,5 +8,7 @@ authors:
 license: MIT
 
 development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
   timecop:
     github: crystal-community/timecop.cr

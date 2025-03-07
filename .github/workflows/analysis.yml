@@ -1,0 +1,40 @@
+---
+name: Analysis
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: 13 7 * * 6
+
+concurrency:
+  group: ${{ github.ref }}-analysis
+  cancel-in-progress: true
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+      - name: Check formatting
+        run: crystal tool format --check
+
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+      - run: shards install
+      - name: Run Ameba Linter
+        run: bin/ameba
+      - name: Yaml Linting
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint.yml

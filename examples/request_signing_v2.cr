@@ -8,7 +8,7 @@ SECRET  = ENV["AWS_SECRET"]
 REGION  = ENV["AWS_REGION"]
 HOST    = "#{BUCKET}.#{SERVICE}.amazonaws.com"
 
-def client(host, &block)
+def client(host, &)
   client = HTTP::Client.new(host)
 
   client.before_request do |request|

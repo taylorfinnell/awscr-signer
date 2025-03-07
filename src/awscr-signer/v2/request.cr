@@ -38,7 +38,7 @@ module Awscr
       end
 
       private def expires
-        @query_params.find { |k, v| k == "Expires" }.try(&.last)
+        @query_params.find { |k, _| k == "Expires" }.try(&.last)
       end
 
       # :nodoc:
@@ -86,7 +86,7 @@ module Awscr
 
       # :nodoc:
       private def canonical_params
-        @query_params.select { |k, _| resources.includes?(k) }.sort.map do |k, v|
+        @query_params.select { |k, _| resources.includes?(k) }.sort!.map do |k, v|
           v.empty? ? k : "#{k}=#{v}"
         end.join("&")
       end

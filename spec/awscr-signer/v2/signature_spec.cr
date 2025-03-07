@@ -4,8 +4,10 @@ module Awscr
   module Signer::V2
     describe Signature do
       it "returns reasonable sig" do
-        time = Time.local(2007, 3, 27, 19, 36, 42)
+        time = Time.utc(2007, 3, 27, 19, 36, 42)
         date = Signer::Date.new(time)
+        date.to_s.should eq("2007-03-27 19:36:42 UTC")
+
         scope = Signer::Scope.new("us-east-1", "s3", time)
         creds = Signer::Credentials.new("AKIAIOSFODNN7EXAMPLE",
           "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
@@ -35,8 +37,8 @@ Tue, 27 Mar 2007 19:36:42 +0000
         request.headers.add("Content-Encoding", "gzip")
         request.headers.add("Content-Length", "5913339")
 
-        time = Time.local(2007, 3, 27, 21, 6, 8)
-        date = Signer::Date.new(time)
+        time = Time.utc(2007, 3, 27, 21, 6, 8)
+        # date = Signer::Date.new(time)
         scope = Signer::Scope.new("us-east-1", "s3", time)
         creds = Signer::Credentials.new("AKIAIOSFODNN7EXAMPLE",
           "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")

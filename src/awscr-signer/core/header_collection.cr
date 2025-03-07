@@ -58,7 +58,7 @@ module Awscr
 
       # Get a header by key, or nil of it does not exit
       def []?(key) : (Header | Nil)
-        @headers.find { |g| g == key }
+        @headers.find { |header| header == key }
       end
 
       # Set or add a header by key value
@@ -85,7 +85,7 @@ module Awscr
       end
 
       # Yields each header
-      def each
+      def each(&)
         @headers.each { |header| yield header }
       end
 
