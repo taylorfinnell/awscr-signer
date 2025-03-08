@@ -5,7 +5,7 @@ module Awscr
     describe Request do
       it "does not modify http request body" do
         body = IO::Memory.new("body")
-        request = Request.new("GET", "/", body)
+        Request.new("GET", "/", body)
         body.gets_to_end.should eq("body")
       end
 

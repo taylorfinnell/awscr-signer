@@ -31,7 +31,7 @@ module Awscr
         values.each do |v|
           @values.push(v)
         end
-        values.any?
+        !values.empty?
       end
 
       # Return the header as a string

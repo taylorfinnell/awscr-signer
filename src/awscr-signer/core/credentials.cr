@@ -29,8 +29,8 @@ module Awscr
 
       # Compare two `Credentials` object, returns true if equal, false
       # otherwise.
-      def <=>(creds : Credentials)
-        creds.to_s <=> to_s
+      def <=>(other : Credentials)
+        other.to_s <=> to_s
       end
     end
   end

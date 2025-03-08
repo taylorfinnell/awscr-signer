@@ -51,12 +51,12 @@ module Awscr
         io << "#{key}:#{value}"
       end
 
-      def <=>(header : Header) : Int
-        header.key <=> key
+      def <=>(other : Header) : Int
+        other.key <=> key
       end
 
-      def <=>(string : String) : Int
-        Header.new(string, "") <=> self
+      def <=>(other : String) : Int
+        Header.new(other, "") <=> self
       end
     end
   end
