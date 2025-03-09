@@ -6,7 +6,7 @@ module Awscr
       # Signs a Crystal HTTP::Request using a given scope.
       #
       # ```
-      # signer = Signer::V4.new("s3", "region", "key", "secret")
+      # signer = Signer::V4.new(service: "s3", region: "region", aws_access_key: "key", aws_secret_key: "secret")
       # signer.sign(request)
       # signer.sign("some string")
       # signer.presign(request)
@@ -14,7 +14,11 @@ module Awscr
       class V4
         include Interface
 
-        def initialize(@service : String, @region : String, @aws_access_key : String, @aws_secret_key : String, @amz_security_token : String? = nil)
+        def initialize(@service : String,
+                       @region : String,
+                       @aws_access_key : String,
+                       @aws_secret_key : String,
+                       @amz_security_token : String? = nil)
           @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 
@@ -51,6 +55,8 @@ module Awscr
           end
 
           canonical_request.query.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")
+
+          Log.trace &.emit("Creating signature", {location: "#{__FILE__}:#{__LINE__}", method: "querystring_impl", canonical_request: canonical_request.to_s})
 
           signature = Signer::V4::Signature.new(scope, canonical_request.to_s, @credentials)
           request.query_params.add("X-Amz-SignedHeaders", "#{canonical_request.headers.keys.join(";")}")
@@ -95,6 +101,8 @@ module Awscr
             canonical_request.headers.add("X-Amz-Content-Sha256",
               canonical_request.digest)
           end
+
+          Log.trace &.emit("Creating signature", {location: "#{__FILE__}:#{__LINE__}", method: "header_impl", canonical_request: canonical_request.to_s})
 
           signature = Signer::V4::Signature.new(scope, canonical_request.to_s, @credentials)
 
