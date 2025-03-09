@@ -73,8 +73,12 @@ module Awscr
             request.headers["X-Amz-Date"] ||= scope.date.iso8601
           end
 
-          canonical_request = Signer::V4::Request.new(request.method,
-            request.path, request.body, encode_path)
+          canonical_request = Signer::V4::Request.new(
+            request.method,
+            request.path,
+            request.body,
+            encode_path
+          )
 
           request.query_params.to_h.each do |k, v|
             canonical_request.query.add(k, v)
