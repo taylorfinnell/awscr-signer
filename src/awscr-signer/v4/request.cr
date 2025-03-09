@@ -99,6 +99,8 @@ module Awscr
                             ignored. Use #query object intead") unless uri.query.nil?
 
         path = uri.normalize.path
+        return "/" if path.blank?
+
         if @encode
           self.class.encode_path(path)
         else

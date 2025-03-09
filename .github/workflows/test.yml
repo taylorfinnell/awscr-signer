@@ -18,6 +18,9 @@ jobs:
           - 1.14.1
           - 1.15.1
         experimental: [false]
+        include:
+          - crystal_version: nightly
+            experimental: true
     name: Crystal ${{ matrix.crystal_version }}
     continue-on-error: ${{ matrix.experimental }}
     steps:
