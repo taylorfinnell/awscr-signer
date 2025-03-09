@@ -1,0 +1,40 @@
+name: Test
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: 13 1 * * 6
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal_version:
+          - 1.12.2
+          - 1.13.3
+          - 1.14.1
+          - 1.15.1
+        experimental: [false]
+    name: Crystal ${{ matrix.crystal_version }}
+    continue-on-error: ${{ matrix.experimental }}
+    steps:
+      - name: "[Git] Checkout code"
+        uses: actions/checkout@v4
+
+      - uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal_version }}
+
+      - name: "[Setup] Install dependencies"
+        run: shards install
+
+      - name: "[Test] Run specs"
+        run: crystal spec -v --error-trace
+
+      - name: "[Test] Smoke tests"
+        run: |
+          crystal run --release --stats --progress examples/request_signing_v4.cr
+          crystal run --release --stats --progress examples/request_signing_v2.cr

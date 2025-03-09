@@ -1,11 +1,12 @@
 # Sign any Crystal HTTP::Request. Here we list S3 objects in a bucket.
+# Reference https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing-example
 require "../src/awscr-signer"
 
 SERVICE = "s3"
-BUCKET  = ENV["AWS_BUCKET"]
-KEY     = ENV["AWS_KEY"]
-SECRET  = ENV["AWS_SECRET"]
-REGION  = ENV["AWS_REGION"]
+BUCKET  = ENV.fetch("AWS_BUCKET", "examplebucket")
+KEY     = ENV.fetch("AWS_KEY", "AKIAIOSFODNN7EXAMPLE")
+SECRET  = ENV.fetch("AWS_SECRET", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
+REGION  = ENV.fetch("AWS_REGION", "us-east-1")
 HOST    = "#{BUCKET}.#{SERVICE}.amazonaws.com"
 
 def client(host, &)
