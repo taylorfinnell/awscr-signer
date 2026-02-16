@@ -11,6 +11,7 @@ module Awscr
     # ```
     class HeaderCollection
       include Enumerable(Header)
+      include Indexable(Header)
 
       # List of headers names not allowed in the collection.
       BLACKLIST_HEADERS = [
@@ -87,6 +88,14 @@ module Awscr
       # Yields each header
       def each(&)
         @headers.each { |header| yield header }
+      end
+
+      def size : Int32
+        @headers.size
+      end
+
+      def unsafe_fetch(index : Int) : Header
+        @headers.unsafe_fetch(index)
       end
 
       # Returns the collection of headers separated by newline with a trailing

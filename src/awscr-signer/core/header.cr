@@ -10,8 +10,7 @@ module Awscr
     # header.to_s # => k:v,value2
     # ```
     class Header
-      include Comparable(Header)
-      include Comparable(String)
+      include Comparable(Header | String)
 
       @values = [] of String
 
@@ -51,12 +50,12 @@ module Awscr
         io << "#{key}:#{value}"
       end
 
-      def <=>(other : Header) : Int
-        other.key <=> key
-      end
-
-      def <=>(other : String) : Int
-        Header.new(other, "") <=> self
+      def <=>(other : Header | String) : Int32
+        case other
+        when Header then other.key <=> key
+        when String then Header.new(other, "") <=> self
+        else 0
+        end
       end
     end
   end
