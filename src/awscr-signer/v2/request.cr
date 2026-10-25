@@ -7,7 +7,7 @@ module Awscr
       getter query_params
       getter headers
 
-      def initialize(@method : String, @uri : URI, body : IO | String | Nil)
+      def initialize(@method : String, @uri : URI, body : IO | String?)
         @query_params = Signer::QueryString.new
         @headers = Signer::HeaderCollection.new
       end
@@ -32,8 +32,6 @@ module Awscr
         if host = @headers["Host"]?
           # remove port
           host.value.split(":").first
-        else
-          nil
         end
       end
 
@@ -93,9 +91,9 @@ module Awscr
 
       # :nodoc:
       private def resources
-        %w(acl lifecycle location logging notification partNumber policy
+        %w[acl lifecycle location logging notification partNumber policy
           requestPayment torrent uploadId uploads versionId versioning versions
-          website)
+          website]
       end
 
       # :nodoc:

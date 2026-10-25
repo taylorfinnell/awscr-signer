@@ -6,3 +6,6 @@
 # Run `ameba --only Lint/LiteralInInterpolation` for details
 Lint/LiteralInInterpolation:
   Enabled: false
+
+Style/MultilineStringLiteral:
+  Enabled: false

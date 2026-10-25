@@ -27,14 +27,14 @@ module Awscr
         region = "us-east-1"
         service = "s3"
         canonical_request = <<-REQUEST
-        GET
-        /test.txt
-        X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host
-        host:examplebucket.s3.amazonaws.com
+          GET
+          /test.txt
+          X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host
+          host:examplebucket.s3.amazonaws.com
 
-        host
-        UNSIGNED-PAYLOAD
-        REQUEST
+          host
+          UNSIGNED-PAYLOAD
+          REQUEST
 
         scope = Scope.new(region, service, time)
         sig = Signature.new(scope, canonical_request, Credentials.new(key, secret))
@@ -50,16 +50,16 @@ module Awscr
         service = "service"
 
         canonical_request = <<-REQUEST
-        GET
-        /
+          GET
+          /
 
-        host:example.amazonaws.com
-        my-header1:value4,value1,value3,value2
-        x-amz-date:20150830T123600Z
+          host:example.amazonaws.com
+          my-header1:value4,value1,value3,value2
+          x-amz-date:20150830T123600Z
 
-        host;my-header1;x-amz-date
-        e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-        REQUEST
+          host;my-header1;x-amz-date
+          e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+          REQUEST
 
         scope = Scope.new(region, service, time)
         sig = Signature.new(scope, canonical_request, Credentials.new(key, secret))
@@ -75,15 +75,15 @@ module Awscr
         service = "service"
 
         canonical_request = <<-TEXT
-        GET
+          GET
 
 
-        host:example.amazonaws.com
-        x-amz-date:20150830T123600Z
+          host:example.amazonaws.com
+          x-amz-date:20150830T123600Z
 
-        host;x-amz-date
-        e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-        TEXT
+          host;x-amz-date
+          e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+          TEXT
 
         scope = Scope.new(region, service, time)
         sig = Signature.new(scope, canonical_request, Credentials.new(key, secret))

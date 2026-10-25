@@ -50,7 +50,7 @@ module Awscr
       it "returns nil if no header found with []" do
         headers = HeaderCollection.new
 
-        headers["x"]?.should eq nil
+        headers["x"]?.should be_nil
       end
 
       it "merges dupe headers into a single header with csv handles multiline" do

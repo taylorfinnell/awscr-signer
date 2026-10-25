@@ -31,7 +31,7 @@ module Awscr
                 "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
               signer.sign(request)
 
-              request.headers.has_key?("Date").should eq(false)
+              request.headers.has_key?("Date").should be_false
               request.headers["X-Amz-Date"].should eq(Signer::Date.new(time).iso8601)
               request.headers["Authorization"].should eq("AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150101/us-east-1/s3/aws4_request, SignedHeaders=x-amz-content-sha256;x-amz-date, Signature=a0928db39f84c9d7993e5068d68d9ade9440626c9293f81cd73ae86353ccf460")
             end
@@ -49,7 +49,7 @@ module Awscr
                 "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
               signer.sign(request)
 
-              request.headers.has_key?("Date").should eq(false)
+              request.headers.has_key?("Date").should be_false
               request.headers["X-Amz-Date"].should eq(Signer::Date.new(time2).iso8601)
               request.headers["Authorization"].should eq("AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150101/us-east-1/s3/aws4_request, SignedHeaders=x-amz-content-sha256;x-amz-date, Signature=bb6067e07d40d9dea1352f442bdd093afaceefe1a80b68990fae4f63474365ea")
             end
@@ -63,7 +63,7 @@ module Awscr
                 "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
               signer.sign(request)
 
-              request.headers.has_key?("Date").should eq(false)
+              request.headers.has_key?("Date").should be_false
               request.headers["X-Amz-Date"].should eq(Signer::Date.new(time).iso8601)
               request.headers["Authorization"].should eq("AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150101/us-east-1/s3/aws4_request, SignedHeaders=x-amz-content-sha256;x-amz-date, Signature=a0928db39f84c9d7993e5068d68d9ade9440626c9293f81cd73ae86353ccf460")
             end
@@ -79,7 +79,7 @@ module Awscr
                 "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
               signer.sign(request)
 
-              request.headers.has_key?("Date").should eq(false)
+              request.headers.has_key?("Date").should be_false
               request.headers["X-Amz-Date"].should eq(Signer::Date.new(time2).iso8601)
               request.headers["Authorization"].should eq("AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150101/us-east-1/s3/aws4_request, SignedHeaders=x-amz-content-sha256;x-amz-date, Signature=bb6067e07d40d9dea1352f442bdd093afaceefe1a80b68990fae4f63474365ea")
             end

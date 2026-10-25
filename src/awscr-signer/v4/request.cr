@@ -35,7 +35,7 @@ module Awscr
       @query : QueryString
       @encode : Bool
 
-      def initialize(@method : String, path : String, body : IO | String | Nil, @encode = true, digest : String? = nil)
+      def initialize(@method : String, path : String, body : IO | String?, @encode = true, digest : String? = nil)
         @path = build_path(path)
         @query = QueryString.new
         @headers = HeaderCollection.new
@@ -110,8 +110,9 @@ module Awscr
       private def build_path(path)
         return "/" if path.blank?
         uri = URI.parse(path)
-        raise Exception.new("You may not give a URI with query params, they are
-                            ignored. Use #query object intead") unless uri.query.nil?
+        if !uri.query.nil?
+          raise Exception.new("You may not give a URI with query params, they are ignored. Use #query object intead")
+        end
 
         path = uri.normalize.path
         return "/" if path.blank?

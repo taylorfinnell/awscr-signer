@@ -53,7 +53,7 @@ module Awscr
       describe "host" do
         it "returns the uri host" do
           request = Request.new("GET", "/", "")
-          request.host.should eq(nil)
+          request.host.should be_nil
         end
 
         it "returns host if set" do
