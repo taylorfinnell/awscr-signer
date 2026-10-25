@@ -12,3 +12,4 @@ development_dependencies:
     github: crystal-ameba/ameba
   timecop:
     github: crystal-community/timecop.cr
+    version: 0.5.0
