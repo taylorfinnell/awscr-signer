@@ -28,6 +28,26 @@ module Awscr
 
           request.digest.should eq("230d8358dc8e8890b4c58deeb62912ee2f20357ae92a5cc861b98e68fe31acb5")
         end
+
+        it "uses explicit digest when provided" do
+          r, w = IO.pipe
+          request = Request.new("GET", "/", r, digest: "custom-digest")
+
+          request.digest.should eq("custom-digest")
+          w.close
+          r.close
+        end
+
+        it "raises descriptive error when body IO cannot be rewound after digesting" do
+          r, w = IO.pipe
+          w.write("data".to_slice)
+          w.close
+
+          expect_raises(Exception, /Cannot sign request: body IO cannot be rewound/) do
+            Request.new("GET", "/", r)
+          end
+          r.close
+        end
       end
 
       describe "host" do

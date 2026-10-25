@@ -84,6 +84,22 @@ module Awscr
               request.headers["Authorization"].should eq("AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150101/us-east-1/s3/aws4_request, SignedHeaders=x-amz-content-sha256;x-amz-date, Signature=bb6067e07d40d9dea1352f442bdd093afaceefe1a80b68990fae4f63474365ea")
             end
           end
+
+          it "preserves existing X-Amz-Content-Sha256 header without reading body" do
+            with_time_freeze(time) do
+              r, w = IO.pipe
+              request = HTTP::Request.new("PUT", "/upload", HTTP::Headers{"X-Amz-Content-Sha256" => "UNSIGNED-PAYLOAD"}, r)
+
+              signer = V4.new("s3", "us-east-1",
+                "AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+              signer.sign(request)
+
+              request.headers["X-Amz-Content-Sha256"].should eq("UNSIGNED-PAYLOAD")
+              request.headers["Authorization"].should contain("SignedHeaders=x-amz-content-sha256;x-amz-date")
+              w.close
+              r.close
+            end
+          end
         end
       end
     end

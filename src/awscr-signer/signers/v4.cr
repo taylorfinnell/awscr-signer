@@ -43,8 +43,10 @@ module Awscr
           request.query_params.add("X-Amz-Credential", "#{@credentials.key}/#{scope}")
           request.query_params.add("X-Amz-Date", scope.date.iso8601)
 
+          existing_sha = request.headers["X-Amz-Content-Sha256"]? || request.query_params["X-Amz-Content-Sha256"]?
+
           canonical_request = Signer::V4::Request.new(request.method,
-            request.path, request.body, encode_path)
+            request.path, request.body, encode_path, digest: existing_sha)
 
           request.query_params.to_h.each do |k, v|
             canonical_request.query.add(k, v)
@@ -83,11 +85,14 @@ module Awscr
             request.headers["X-Amz-Date"] ||= scope.date.iso8601
           end
 
+          existing_sha = request.headers["X-Amz-Content-Sha256"]?
+
           canonical_request = Signer::V4::Request.new(
             request.method,
             request.path,
             request.body,
-            encode_path
+            encode_path,
+            digest: existing_sha
           )
 
           request.query_params.to_h.each do |k, v|
@@ -99,11 +104,13 @@ module Awscr
           end
 
           if add_sha # amazon test suite does not inlcude this
-            request.headers["X-Amz-Content-Sha256"] =
+            request.headers["X-Amz-Content-Sha256"] ||=
               canonical_request.digest
 
-            canonical_request.headers.add("X-Amz-Content-Sha256",
-              canonical_request.digest)
+            unless canonical_request.headers["x-amz-content-sha256"]?
+              canonical_request.headers.add("X-Amz-Content-Sha256",
+                canonical_request.digest)
+            end
           end
 
           Log.trace &.emit("Creating signature", {

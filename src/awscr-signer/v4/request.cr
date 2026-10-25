@@ -35,12 +35,12 @@ module Awscr
       @query : QueryString
       @encode : Bool
 
-      def initialize(@method : String, path : String, body : IO | String | Nil, @encode = true)
+      def initialize(@method : String, path : String, body : IO | String | Nil, @encode = true, digest : String? = nil)
         @path = build_path(path)
         @query = QueryString.new
         @headers = HeaderCollection.new
         @body = build_body(body)
-        @digest = build_body_digest
+        @digest = digest || build_body_digest
       end
 
       def host
@@ -70,14 +70,31 @@ module Awscr
           while (read_bytes = io.read(buffer.to_slice)) > 0
             sha << buffer.to_slice[0, read_bytes]
           end
-          io.rewind
+          begin
+            io.rewind
+          rescue ex
+            raise Exception.new("Cannot sign request: body IO cannot be rewound after computing SHA256 digest. For non-seekable streaming IOs, provide 'X-Amz-Content-Sha256: UNSIGNED-PAYLOAD' header.", cause: ex)
+          end
           sha.final.hexstring
         {% end %}
       end
 
+      private def unsigned_payload?(body)
+        case body
+        when IO::Memory
+          body.to_slice == "UNSIGNED-PAYLOAD".to_slice
+        when String
+          body == "UNSIGNED-PAYLOAD"
+        when IO
+          body.to_s == "UNSIGNED-PAYLOAD"
+        else
+          false
+        end
+      end
+
       private def build_body_digest
-        if body.to_s == "UNSIGNED-PAYLOAD"
-          body.to_s
+        if unsigned_payload?(body)
+          "UNSIGNED-PAYLOAD"
         else
           digest(body)
         end
