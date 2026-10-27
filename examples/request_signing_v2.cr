@@ -1,4 +1,5 @@
 # Sign any Crystal HTTP::Request. Here we list S3 objects in a bucket.
+require "http/client"
 require "../src/awscr-signer"
 
 Log.setup_from_env

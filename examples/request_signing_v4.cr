@@ -1,5 +1,6 @@
 # Sign any Crystal HTTP::Request. Here we list S3 objects in a bucket.
 # Reference https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing-example
+require "http/client"
 require "../src/awscr-signer"
 
 Log.setup_from_env

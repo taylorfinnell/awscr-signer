@@ -81,12 +81,12 @@ module Awscr
 
           it "get-utf8" do
             with_time_freeze(time) do
-              request = HTTP::Request.new("GET", "/ሴ", HTTP::Headers.new)
+              request = HTTP::Request.new("GET", URI.encode_path("/ሴ"), HTTP::Headers.new)
 
               request.headers.add("Host", "example.amazonaws.com")
               request.headers.add("X-Amz-Date", "20150830T123600Z")
 
-              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=8318018e0b0f223aa2bbf98705b62bb787dc9c0e678f255a891fd03141be5d85")
+              assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=697b34846207a3f72246f99d74ae1ee4fe54f44bb06730c58a0d339eb079596d")
             end
           end
 
@@ -136,7 +136,7 @@ module Awscr
 
           it "get-vanilla-utf8" do
             with_time_freeze(time) do
-              request = HTTP::Request.new("GET", "/?ሴ=bar", HTTP::Headers.new)
+              request = HTTP::Request.new("GET", "/?#{URI.encode_path_segment("ሴ")}=bar", HTTP::Headers.new)
 
               request.headers.add("Host", "example.amazonaws.com")
               request.headers.add("X-Amz-Date", "20150830T123600Z")
@@ -231,13 +231,13 @@ module Awscr
 
             it "get-space" do
               with_time_freeze(time) do
-                request = HTTP::Request.new("GET", "/example space/", HTTP::Headers.new)
+                request = HTTP::Request.new("GET", URI.encode_path("/example space/"), HTTP::Headers.new)
 
                 request.headers.add("Host", "example.amazonaws.com")
                 request.headers.add("X-Amz-Date", "20150830T123600Z")
                 request.headers.delete("Content-Length") # b/c HTTP::Request.new adds it
 
-                assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=652487583200325589f1fba4c7e578f72c47cb61beeca81406b39ddec1366741")
+                assert_request_signed(request, "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=446b817944c553435b35e813c261ff4e161fff982d1bacdef1c87f6785dd1662")
               end
             end
           end
